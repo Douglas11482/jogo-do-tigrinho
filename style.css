@@ -1,8 +1,22 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(145deg, #ffeaa7, #fab1a0);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
   text-align: center;
-  background: #f4f4f4;
-  padding: 20px;
+  max-width: 400px;
+  width: 90%;
 }
 
 h1 {
@@ -11,14 +25,11 @@ h1 {
 }
 
 #painel-config {
-  background: #fff;
-  border: 2px solid #ffa500;
+  background: #fbeec1;
+  border: 2px solid #f6b93b;
   border-radius: 10px;
   padding: 15px;
   margin-bottom: 25px;
-  display: inline-block;
-  text-align: left;
-  min-width: 280px;
 }
 
 #painel-config label {
@@ -30,45 +41,61 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 5rem;
-  gap: 2rem;
+  font-size: 4rem;
+  gap: 1.5rem;
   margin: 30px 0;
-  height: 80px;
-  min-height: 80px;
+  height: 70px;
+  min-height: 70px;
 }
 
 #resultado {
-  font-size: 1.4rem;
-  margin-bottom: 15px;
-  color: #444;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #2d3436;
   font-weight: bold;
   min-height: 24px;
 }
 
 #saldo {
-  font-size: 1.5rem;
-  margin-bottom: 25px;
-  color: #006400;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  color: #27ae60;
   font-weight: bold;
 }
 
 button {
-  background-color: #ffa500;
+  background-color: #fd9644;
   border: none;
-  padding: 12px 25px;
-  font-size: 1.1rem;
+  padding: 12px 20px;
+  font-size: 1rem;
   color: white;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
+  margin-top: 10px;
   transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #e59400;
+  background-color: #e17055;
+}
+
+#doacao {
+  margin-top: 20px;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+#doacao button {
+  background-color: #00b894;
+  margin-top: 8px;
+}
+
+#doacao button:hover {
+  background-color: #019875;
 }
 
 #aviso {
-  margin-top: 30px;
-  color: #777;
-  font-size: 0.95rem;
+  margin-top: 20px;
+  color: #6c5ce7;
+  font-size: 0.9rem;
 }
