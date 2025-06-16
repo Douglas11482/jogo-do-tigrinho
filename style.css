@@ -98,8 +98,59 @@ button {
   color: #ccc;
 }
 @media (max-width: 600px) {
+  #pix-area {/* ...mantém todo o CSS anterior até #pix-area... */
+
+#pix-area {
+  /* removido position:absolute, top, right */
+  background: #001a40;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #ffcc00;
+  margin: 20px auto;       /* centraliza e dá espaçamento */
+  display: inline-block;
+}
+
+#qrcode {
+  width: 120px;
+  height: 120px;
+  margin: auto;
+}
+
+#aviso {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #ccc;
+}
+
+/* media query mantida igual */
+@media (max-width: 600px) /* ...mantém todo o CSS anterior até #pix-area... */
+
+#pix-area {
+  /* removido position:absolute, top, right */
+  background: #001a40;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px #ffcc00;
+  margin: 20px auto;       /* centraliza e dá espaçamento */
+  display: inline-block;
+}
+
+#qrcode {
+  width: 120px;
+  height: 120px;
+  margin: auto;
+}
+
+#aviso {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #ccc;
+}
+
+/* media query mantida igual */
+@media (max-width: 600px) {
   #pix-area {
-    position: abaixo;
     margin: 20px auto;
   }
 }
+
