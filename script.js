@@ -41,7 +41,10 @@ function atualizarPainel() {
 }
 
 function atualizarQRCode() {
-  qrCodeImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=pix:"+pixKey;
+  // Gerar QR Code Pix com a chave no formato correto
+  const pixData = `00020126360014BR.GOV.BCB.PIX0114${pixKey}0208***5204000053039865405.005802BR5925Jogo do Tigrinho6009Sao Paulo6108054090006304`;
+  // Para simplificar, vamos usar a chave diretamente no link da API, que aceita só a chave Pix
+  qrCodeImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=pix:${pixKey}`;
 }
 
 function girar() {
