@@ -149,3 +149,13 @@ speedUpBtn.addEventListener("click", aumentarVelocidade);
 
 criarGrid();
 atualizarPainel();
+
+
+function copyPixKey() {
+  const key = document.getElementById("pix-key").innerText;
+  navigator.clipboard.writeText(key).then(() => {
+    const btn = document.getElementById("copy-btn");
+    btn.innerText = "Copiado!";
+    setTimeout(() => (btn.innerText = "Copiar"), 2000);
+  });
+}
