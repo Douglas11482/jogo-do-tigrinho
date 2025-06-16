@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jogo do Tigrinho - Slot Machine</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>🎰 Jogo do Tigrinho</h1>
+
+  <div id="painel-config">
+    <h2>Configurações do Jogo</h2>
+    <label>Saldo inicial: R$ <input type="number" id="saldoInicial" value="50" min="0" /></label><br/>
+    <label>Custo por giro: R$ <input type="number" id="custoGiro" value="2" min="0" /></label><br/>
+    <label>Prêmio por vitória: R$ <input type="number" id="premio" value="15" min="0" /></label><br/>
+    <button id="btnSalvarConfig">Salvar Configurações</button>
+  </div>
+
+  <div class="slot" id="rolo">🐯 | 🍒 | 💎</div>
+  <div id="resultado"></div>
+  <div id="saldo">💰 Saldo: R$50.00</div>
+  <button id="btnGirar">Girar</button>
+
+  <audio id="somGiro" src="sounds/giro.mp3"></audio>
+  <audio id="somGanhou" src="sounds/ganhou.mp3"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
