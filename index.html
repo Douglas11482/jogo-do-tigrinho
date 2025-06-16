@@ -2,27 +2,39 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Jogo do Tigrinho - Slot Machine</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>🎰 Jogo do Tigrinho</h1>
+  <div class="container">
+    <h1>🎰 Jogo do Tigrinho</h1>
 
-  <div id="painel-config">
-    <h2>Configurações do Jogo</h2>
-    <label>Saldo inicial: R$ <input type="number" id="saldoInicial" value="50" min="0" /></label><br/>
-    <label>Custo por giro: R$ <input type="number" id="custoGiro" value="2" min="0" /></label><br/>
-    <label>Prêmio por vitória: R$ <input type="number" id="premio" value="15" min="0" /></label><br/>
-    <button id="btnSalvarConfig">Salvar Configurações</button>
+    <div id="painel-config">
+      <h2>⚙️ Configurações</h2>
+      <label>Saldo inicial: R$ <input type="number" id="saldoInicial" value="50" min="0" /></label><br/>
+      <label>Custo por giro: R$ <input type="number" id="custoGiro" value="2" min="0" /></label><br/>
+      <label>Prêmio por vitória: R$ <input type="number" id="premio" value="15" min="0" /></label><br/>
+      <button id="btnSalvarConfig">Salvar Configurações</button>
+    </div>
+
+    <div id="slot-container">
+      <div id="rolo">🐯 🍒 💎</div>
+      <div id="resultado"></div>
+      <div id="saldo">💰 Saldo: R$50.00</div>
+      <button id="btnGirar">🎲 Girar</button>
+    </div>
+
+    <div id="doacao">
+      <p>❤️ Apoie este projeto (sem fins lucrativos)</p>
+      <button onclick="alert('Função de doação simulada')">Fazer Doação</button>
+    </div>
+
+    <p id="aviso">🔒 Este projeto é apenas para fins educacionais e sem fins lucrativos.</p>
   </div>
 
-  <div id="rolo">🐯 🍒 💎</div>
-  <div id="resultado"></div>
-  <div id="saldo">💰 Saldo: R$50.00</div>
-  <button id="btnGirar">Girar</button>
-
-  <!-- Mensagem de aviso -->
-  <p id="aviso">🔒 Projeto sem fins lucrativos</p>
+  <audio id="somGiro" src="sounds/giro.mp3" preload="auto"></audio>
+  <audio id="somGanhou" src="sounds/ganhou.mp3" preload="auto"></audio>
 
   <script src="script.js"></script>
 </body>
