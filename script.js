@@ -38,12 +38,24 @@ function atualizarPainel() {
   balanceEl.textContent = balance.toFixed(2);
   betEl.textContent = bet.toFixed(2);
   atualizarQRCode();
+  atualizarBotoesEstado();
+}
+
+function atualizarBotoesEstado() {
+  // Desabilita aumentar aposta se for maior que saldo
+  betPlusBtn.disabled = bet + 10 > balance;
+  // Desabilita diminuir aposta se menor que 10
+  betMinusBtn.disabled = bet - 10 < 10;
+  // Desabilita girar se saldo insuficiente
+  spinBtn.disabled = spinning || bet > balance;
+  // Desabilita adicionar saldo se spinning
+  addBalanceBtn.disabled = spinning;
+  // Acelerar só desabilita se spinning
+  speedUpBtn.disabled = spinning;
 }
 
 function atualizarQRCode() {
-  // Gerar QR Code Pix com a chave no formato correto
-  const pixData = `00020126360014BR.GOV.BCB.PIX0114${pixKey}0208***5204000053039865405.005802BR5925Jogo do Tigrinho6009Sao Paulo6108054090006304`;
-  // Para simplificar, vamos usar a chave diretamente no link da API, que aceita só a chave Pix
+  // Atualiza o QR Code Pix com sua chave usando o site api.qrserver.com
   qrCodeImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=pix:${pixKey}`;
 }
 
@@ -72,6 +84,7 @@ function girar() {
       verificarResultado();
     }
   }, speed);
+  atualizarBotoesEstado();
 }
 
 function verificarResultado() {
@@ -105,7 +118,7 @@ function verificarResultado() {
 
   if (ganhou) {
     balance += bet * 5;
-    messageEl.textContent = "Você ganhou! + R$" + (bet * 5).toFixed(2);
+    messageEl.textContent = `Você ganhou! + R$${(bet * 5).toFixed(2)}`;
   } else {
     messageEl.textContent = "Tente novamente!";
   }
@@ -123,20 +136,22 @@ function aumentarVelocidade() {
 }
 
 addBalanceBtn.addEventListener("click", () => {
-  balance += 50;
-  atualizarPainel();
-  messageEl.textContent = "Saldo aumentado em R$50!";
+  if (!spinning) {
+    balance += 50;
+    atualizarPainel();
+    messageEl.textContent = "Saldo aumentado em R$50!";
+  }
 });
 
 betPlusBtn.addEventListener("click", () => {
-  if (bet + 10 <= balance) {
+  if (!spinning && bet + 10 <= balance) {
     bet += 10;
     atualizarPainel();
   }
 });
 
 betMinusBtn.addEventListener("click", () => {
-  if (bet - 10 >= 10) {
+  if (!spinning && bet - 10 >= 10) {
     bet -= 10;
     atualizarPainel();
   }
