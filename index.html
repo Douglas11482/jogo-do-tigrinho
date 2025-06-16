@@ -1,54 +1,45 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Jogo do Tigrinho - Diversão</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Jogo do Tigrinho</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div id="game-container">
     <div class="top-bar">
-        <button id="changeAddAmount">💰 Valor: R$ <span id="addAmountDisplay">10</span></button>
-        <button id="addBalance">Adicionar Saldo</button>
-        <div id="balance">Saldo: R$ 0</div>
+      <button id="adjust-add-amount">▲</button>
+      <button id="add-balance">Adicionar saldo</button>
+      <span id="balance">Saldo: R$ 0</span>
     </div>
 
-    <div id="slot">
-        <div class="reel" id="reel1"></div>
-        <div class="reel" id="reel2"></div>
-        <div class="reel" id="reel3"></div>
+    <div id="slot-machine">
+      <div class="reel" id="reel1"></div>
+      <div class="reel" id="reel2"></div>
+      <div class="reel" id="reel3"></div>
     </div>
 
     <div class="controls">
-        <button id="soundToggle">🔊</button>
-        <button id="speed" class="small">⚡</button>
-        <button id="spin">GIRAR</button>
-        <button id="increaseBet">+</button>
-        <button id="decreaseBet">−</button>
+      <button id="sound-toggle" title="Som">🔈</button>
+      <button id="speed-button" title="Velocidade">⚡</button>
+      <button id="spin-button">GIRAR</button>
+      <button id="increase-bet">▲</button>
+      <button id="decrease-bet">▼</button>
     </div>
-
-    <div class="bet-display">Aposta: R$ <span id="betAmount">1</span></div>
-
-    <div class="message">🎮 Este jogo é apenas para diversão. Não envolve dinheiro real.</div>
-
-    <div id="qrcode-container">
-        <canvas id="qrcode"></canvas>
-        <div class="pix-info">
-            💖 Se quiser contribuir com o projeto, doe via Pix abaixo:
-            <div id="pix-key">f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1</div>
-            <button id="copyPix">Copiar Pix</button>
-        </div>
-    </div>
-
+    <div id="bet-display">Aposta: R$ 1</div>
+    
+    <div class="message">Este jogo é apenas para diversão. Ajude com uma contribuição via Pix.</div>
+    <img src="qrcode.png" alt="QR Code Pix" class="qr-code" />
+    <div class="pix-key" onclick="copyPix()">Pix: <span id="pix-key">f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1</span></div>
     <div id="fireworks" class="hidden"></div>
-    <div id="big-win" class="hidden">
-        <h1>GRANDE GANHO</h1>
-        <p>Parabéns!!</p>
-    </div>
+</div>
 
-    <audio id="spinSound" src="spin.mp3"></audio>
-    <audio id="winSound" src="win.mp3"></audio>
+<audio id="spin-sound" src="spin.mp3" preload="auto"></audio>
+<audio id="win-sound" src="win.mp3" preload="auto"></audio>
+<audio id="big-win-sound" src="bigwin.mp3" preload="auto"></audio>
 
-    <script src="qrcode.min.js"></script>
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

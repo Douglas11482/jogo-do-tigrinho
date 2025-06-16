@@ -1,107 +1,90 @@
+
+const icons = ['🍒', '🍋', '🔔', '⭐', '🍀', '💎', '7️⃣'];
 let balance = 0;
-let addAmounts = [1,2,4,8,16,32,64,80,100,120,140,160,180,200,240,260,320,360,400,440,480,500];
-let addIndex = 5;
-let currentBet = 1;
-let betOptions = [...addAmounts];
 let betIndex = 0;
-let speedLevel = 1;
-let soundMuted = false;
+const betValues = [1,2,4,8,16,32,64,80,100,120,140,160,180,200,240,260,320,360,400,440,480,500];
+let addAmounts = [1,2,4,8,16,32,64,80,100,120,140,160,180,200,240,260,320,360,400,440,480,500,1000];
+let addIndex = 0;
+let currentSpeed = 1;
+let muted = false;
 
-const reel1 = document.getElementById('reel1');
-const reel2 = document.getElementById('reel2');
-const reel3 = document.getElementById('reel3');
 const balanceDisplay = document.getElementById('balance');
-const betAmountDisplay = document.getElementById('betAmount');
-const addAmountDisplay = document.getElementById('addAmountDisplay');
+const betDisplay = document.getElementById('bet-display');
+const spinSound = document.getElementById('spin-sound');
+const winSound = document.getElementById('win-sound');
+const bigWinSound = document.getElementById('big-win-sound');
 
-function updateBalanceDisplay() {
-    balanceDisplay.textContent = 'Saldo: R$ ' + balance;
-}
+document.getElementById('adjust-add-amount').onclick = () => {
+  addIndex = (addIndex + 1) % addAmounts.length;
+};
+document.getElementById('add-balance').onclick = () => {
+  balance += addAmounts[addIndex];
+  updateBalance();
+};
+document.getElementById('increase-bet').onclick = () => {
+  if (betIndex < betValues.length - 1) betIndex++;
+  updateBet();
+};
+document.getElementById('decrease-bet').onclick = () => {
+  if (betIndex > 0) betIndex--;
+  updateBet();
+};
+document.getElementById('sound-toggle').onclick = () => {
+  muted = !muted;
+};
+document.getElementById('speed-button').onclick = () => {
+  currentSpeed = currentSpeed >= 3 ? 1 : currentSpeed + 1;
+};
 
-function updateBetDisplay() {
-    betAmountDisplay.textContent = currentBet;
-}
-
-function updateAddAmountDisplay() {
-    addAmountDisplay.textContent = addAmounts[addIndex];
-}
-
-function spinReels() {
-    if (balance < currentBet) return;
-
-    balance -= currentBet;
-    updateBalanceDisplay();
-    if (!soundMuted) document.getElementById('spinSound').play();
-
-    [reel1, reel2, reel3].forEach((reel) => {
-        reel.textContent = ['🍒','🍋','🔔','⭐','🍀','💎'][Math.floor(Math.random()*6)];
-    });
-
-    const win = Math.random() > 0.8;
+document.getElementById('spin-button').onclick = () => {
+  const bet = betValues[betIndex];
+  if (balance < bet) return alert("Saldo insuficiente!");
+  balance -= bet;
+  updateBalance();
+  if (!muted) spinSound.play();
+  animateReels().then(() => {
+    const win = Math.random() < 0.2;
     if (win) {
-        const prize = Math.random() > 0.95 ? 500 : currentBet * 5;
-        balance += prize;
-        updateBalanceDisplay();
-
-        const fire = document.getElementById('fireworks');
-        const bigWin = document.getElementById('big-win');
-
-        if (prize === 500) {
-            bigWin.classList.remove('hidden');
-        } else {
-            fire.classList.remove('hidden');
-        }
-
-        if (!soundMuted) document.getElementById('winSound').play();
-
-        setTimeout(() => {
-            fire.classList.add('hidden');
-            bigWin.classList.add('hidden');
-        }, 2000);
+      const gain = bet * (Math.floor(Math.random() * 10) + 1);
+      balance += gain;
+      updateBalance();
+      showFireworks(gain >= 500);
+      if (!muted) (gain >= 500 ? bigWinSound : winSound).play();
     }
+  });
+};
+
+function updateBalance() {
+  balanceDisplay.textContent = "Saldo: R$ " + balance;
 }
-
-document.getElementById('addBalance').onclick = () => {
-    balance += addAmounts[addIndex];
-    updateBalanceDisplay();
-};
-
-document.getElementById('changeAddAmount').onclick = () => {
-    addIndex = (addIndex + 1) % addAmounts.length;
-    updateAddAmountDisplay();
-};
-
-document.getElementById('increaseBet').onclick = () => {
-    betIndex = (betIndex + 1) % betOptions.length;
-    currentBet = betOptions[betIndex];
-    updateBetDisplay();
-};
-
-document.getElementById('decreaseBet').onclick = () => {
-    betIndex = (betIndex - 1 + betOptions.length) % betOptions.length;
-    currentBet = betOptions[betIndex];
-    updateBetDisplay();
-};
-
-document.getElementById('speed').onclick = () => {
-    speedLevel = speedLevel < 3 ? speedLevel + 1 : 1;
-    alert('Velocidade: ' + speedLevel);
-};
-
-document.getElementById('spin').onclick = spinReels;
-
-document.getElementById('soundToggle').onclick = () => {
-    soundMuted = !soundMuted;
-    document.getElementById('soundToggle').textContent = soundMuted ? '🔇' : '🔊';
-};
-
-document.getElementById('copyPix').onclick = () => {
-    navigator.clipboard.writeText('f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1');
-    alert('Chave Pix copiada!');
-};
-
-new QRCode(document.getElementById('qrcode'), 'f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1');
-
-updateBalanceDisplay();
-updateBetDisplay();
-updateAddAmountDisplay();
+function updateBet() {
+  betDisplay.textContent = "Aposta: R$ " + betValues[betIndex];
+}
+function animateReels() {
+  const reels = ['reel1', 'reel2', 'reel3'];
+  return Promise.all(reels.map((id, i) => new Promise(resolve => {
+    const reel = document.getElementById(id);
+    let count = 0;
+    const interval = setInterval(() => {
+      reel.textContent = icons[Math.floor(Math.random() * icons.length)];
+      count++;
+      if (count > 10 + currentSpeed * 5) {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 50 / currentSpeed);
+  })));
+}
+function showFireworks(big) {
+  const fw = document.getElementById('fireworks');
+  fw.classList.remove('hidden');
+  fw.textContent = big ? "🎆 GRANDE GANHO 🎆
+Parabéns!!" : "🎉";
+  setTimeout(() => fw.classList.add('hidden'), 2000);
+}
+function copyPix() {
+  const pix = document.getElementById('pix-key').textContent;
+  navigator.clipboard.writeText(pix);
+}
+updateBalance();
+updateBet();
