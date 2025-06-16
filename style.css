@@ -99,7 +99,7 @@ button {
 }
 @media (max-width: 600px) {
   #pix-area {
-    position: relative;
+    position: abaixo;
     margin: 20px auto;
   }
 }
