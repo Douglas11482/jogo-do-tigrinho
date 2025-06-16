@@ -1,102 +1,99 @@
-const imagens = ["🐯", "🍒", "💎"];
-const multiplicadores = {
-  "🐯": 10,
-  "💎": 5,
-  "🍒": 2
-};
+const simbolos = ["🐯", "🍒", "💎"];
+const multiplicadores = { "🐯": 10, "💎": 5, "🍒": 2 };
 
 let saldo = 50;
-let aposta = 2;
-let velocidade = "normal";
-
-const grid = document.getElementById("slotGrid");
-const saldoDisplay = document.getElementById("saldo");
-const resultado = document.getElementById("resultado");
-const somGiro = document.getElementById("somGiro");
-const somGanhou = document.getElementById("somGanhou");
+let valorAposta = 2;
+let velocidade = 1000;
 
 function atualizarSaldo() {
-  saldoDisplay.textContent = `💰 Saldo: R$${saldo.toFixed(2)}`;
+  document.getElementById("saldo").textContent = `💰 Saldo: R$${saldo.toFixed(2)}`;
 }
 
-function salvarConfig() {
-  saldo = parseFloat(document.getElementById("saldoInicial").value);
-  aposta = parseFloat(document.getElementById("custoGiro").value);
-  velocidade = document.getElementById("velocidade").value;
-  atualizarSaldo();
-}
-
-function gerarSimbolos() {
-  let simbolos = [];
-  for (let i = 0; i < 9; i++) {
-    const simbolo = imagens[Math.floor(Math.random() * imagens.length)];
-    simbolos.push(simbolo);
+function gerarRoleta() {
+  const roleta = [];
+  for (let i = 0; i < 3; i++) {
+    const linha = [];
+    for (let j = 0; j < 3; j++) {
+      const simbolo = simbolos[Math.floor(Math.random() * simbolos.length)];
+      linha.push(simbolo);
+    }
+    roleta.push(linha);
   }
-  return simbolos;
+  return roleta;
 }
 
-function desenharSimbolos(simbolos) {
-  grid.innerHTML = "";
-  simbolos.forEach(simbolo => {
-    const slot = document.createElement("div");
-    slot.textContent = simbolo;
-    grid.appendChild(slot);
+function exibirRoleta(roleta) {
+  const roletaDiv = document.getElementById("roleta");
+  roletaDiv.innerHTML = "";
+  roleta.flat().forEach(simbolo => {
+    const div = document.createElement("div");
+    div.textContent = simbolo;
+    roletaDiv.appendChild(div);
   });
 }
 
-function verificarLinhas(simbolos) {
-  const linhas = [
-    [0,1,2], [3,4,5], [6,7,8], // horizontais
-    [0,4,8], [2,4,6]           // diagonais
+function verificarVitoria(roleta) {
+  const linhas = [...roleta];
+  const diagonais = [
+    [roleta[0][0], roleta[1][1], roleta[2][2]],
+    [roleta[0][2], roleta[1][1], roleta[2][0]]
   ];
 
-  for (const linha of linhas) {
-    const [a, b, c] = linha;
-    if (simbolos[a] === simbolos[b] && simbolos[b] === simbolos[c]) {
-      return simbolos[a]; // símbolo vencedor
-    }
-  }
+  const vitorias = [...linhas, ...diagonais].filter(linha =>
+    linha.every(s => s === linha[0])
+  );
 
-  return null;
+  if (vitorias.length > 0) {
+    const simbolo = vitorias[0][0];
+    return valorAposta * multiplicadores[simbolo];
+  }
+  return 0;
 }
 
-function girar() {
-  if (saldo < aposta) {
-    resultado.textContent = "Saldo insuficiente.";
+document.getElementById("btnSalvarConfig").onclick = () => {
+  const novoSaldo = parseFloat(document.getElementById("saldoInicial").value);
+  const novaAposta = parseFloat(document.getElementById("valorAposta").value);
+  const novaVelocidade = parseInt(document.getElementById("velocidade").value);
+
+  if (!isNaN(novoSaldo)) saldo = novoSaldo;
+  if (!isNaN(novaAposta)) valorAposta = novaAposta;
+  if (!isNaN(novaVelocidade)) velocidade = novaVelocidade;
+
+  atualizarSaldo();
+};
+
+document.getElementById("btnGirar").onclick = () => {
+  if (saldo < valorAposta) {
+    alert("Saldo insuficiente!");
     return;
   }
 
-  resultado.textContent = "";
-  saldo -= aposta;
+  const somGiro = document.getElementById("somGiro");
+  somGiro.currentTime = 0;
+  somGiro.play();
+
+  saldo -= valorAposta;
   atualizarSaldo();
 
-  if (velocidade !== "instantaneo") somGiro.play();
+  const roleta = gerarRoleta();
+  exibirRoleta(roleta);
 
-  const simbolos = gerarSimbolos();
-  desenharSimbolos(simbolos);
+  setTimeout(() => {
+    const premio = verificarVitoria(roleta);
+    const resultadoDiv = document.getElementById("resultado");
 
-  const vencedor = verificarLinhas(simbolos);
-  if (vencedor) {
-    const premio = aposta * multiplicadores[vencedor];
-    saldo += premio;
+    if (premio > 0) {
+      saldo += premio;
+      resultadoDiv.textContent = `🎉 Você ganhou R$${premio.toFixed(2)}!`;
+      const somGanhou = document.getElementById("somGanhou");
+      somGanhou.currentTime = 0;
+      somGanhou.play();
+    } else {
+      resultadoDiv.textContent = "💔 Tente novamente!";
+    }
+
     atualizarSaldo();
-    resultado.textContent = `🎉 Você ganhou R$${premio.toFixed(2)} com ${vencedor}${vencedor}${vencedor}!`;
-    somGanhou.play();
-  } else {
-    resultado.textContent = "Tente novamente!";
-  }
-}
+  }, velocidade);
+};
 
-document.getElementById("btnSalvarConfig").addEventListener("click", salvarConfig);
-document.getElementById("btnGirar").addEventListener("click", () => {
-  if (velocidade === "rapido") {
-    setTimeout(girar, 100);
-  } else if (velocidade === "instantaneo") {
-    girar();
-  } else {
-    setTimeout(girar, 500);
-  }
-});
-
-// Inicialização
-salvarConfig();
+window.onload = atualizarSaldo;
