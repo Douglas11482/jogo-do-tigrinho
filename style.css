@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -6,21 +10,33 @@ body {
   color: #fff;
   text-align: center;
   overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+
+#tigrinho-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0; /* fundo */
+  pointer-events: none;
 }
 
 .container {
-  padding: 20px;
   position: relative;
-  z-index: 1;
+  z-index: 1; /* conteúdo acima do fundo */
+  padding: 20px;
 }
 
 #slot-machine {
   max-width: 400px;
   margin: 0 auto;
-  background: rgba(0, 0, 50, 0.7);
+  background: rgba(0, 0, 50, 0.8);
   padding: 20px;
   border-radius: 20px;
-  box-shadow: 0 0 20px #000;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
 #grid {
@@ -41,6 +57,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #000;
 }
 
 .controls {
@@ -57,6 +74,14 @@ body {
   display: block;
   margin: 5px 0;
   font-size: 18px;
+}
+
+#bet {
+  width: 80px;
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: none;
 }
 
 .buttons button {
@@ -81,30 +106,21 @@ body {
   color: #00ff00;
 }
 
-#qrcode {
-  margin-top: 20px;
-  width: 150px;
-  height: 150px;
-}
-
-.footer {
-  font-size: 14px;
-  margin-top: 10px;
-  color: #ccc;
-}
-
 .donate-text {
   font-size: 20px;
   font-weight: bold;
   margin-top: 30px;
 }
 
-#tigrinho-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
+#qrcode {
+  margin-top: 10px;
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+}
+
+.footer {
+  font-size: 14px;
+  margin-top: 10px;
+  color: #ccc;
 }
