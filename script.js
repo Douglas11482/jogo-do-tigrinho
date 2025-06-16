@@ -1,161 +1,190 @@
+// Setup valores para apostas e adicionar saldo
+const addAmounts = [1, 2, 5, 10, 20, 40, 80, 120, 160, 200, 240, 280, 320, 360, 400];
+let currentAddIndex = 5; // Começa em R$20
+let betAmounts = [1, 2, 4, 8, 16, 32, 64, 80, 100, 120, 140, 160, 180, 200, 240, 260, 320, 360, 400, 440, 480, 500];
+let currentBetIndex = 0;
+
 let balance = 100;
-let bet = 10;
-let speed = 200;
-
-const slotGrid = document.getElementById("slot-grid");
-const balanceEl = document.getElementById("balance");
-const betEl = document.getElementById("bet");
-const messageEl = document.getElementById("message");
-const qrCodeImg = document.getElementById("qr-code");
-
-const addBalanceBtn = document.getElementById("add-balance-button");
-const spinBtn = document.getElementById("spin-button");
-const speedUpBtn = document.getElementById("speed-up-button");
-const betPlusBtn = document.getElementById("bet-plus");
-const betMinusBtn = document.getElementById("bet-minus");
-
-const pixKey = "f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1";
-
-const slotItems = ["🐯", "🍀", "🍎", "⭐", "💎", "🍉", "🍇", "🍒", "🔔"];
-
 let spinning = false;
-let spinInterval;
-let currentSlots = [];
+let spinSpeed = 1; // 1 = lento, 2 = médio, 3 = rápido
+const maxSpeed = 3;
 
-function criarGrid() {
-  slotGrid.innerHTML = "";
-  currentSlots = [];
-  for (let i = 0; i < 9; i++) {
-    const cell = document.createElement("div");
-    cell.classList.add("slot-cell");
-    cell.textContent = slotItems[Math.floor(Math.random() * slotItems.length)];
-    slotGrid.appendChild(cell);
-    currentSlots.push(cell);
+const reels = [
+  document.getElementById('reel1'),
+  document.getElementById('reel2'),
+  document.getElementById('reel3')
+];
+
+const spinBtn = document.getElementById('spinBtn');
+const speedBtn = document.getElementById('speedBtn');
+const muteBtn = document.getElementById('muteBtn');
+const addBalanceBtn = document.getElementById('addBalance');
+const cycleAddAmountBtn = document.getElementById('cycleAddAmount');
+const addAmountDisplay = document.getElementById('addAmountDisplay');
+const betValueDisplay = document.getElementById('betValue');
+const decreaseBetBtn = document.getElementById('decreaseBet');
+const increaseBetBtn = document.getElementById('increaseBet');
+const balanceDisplay = document.getElementById('balance');
+const pixKeySpan = document.getElementById('pixKey');
+const copyPixBtn = document.getElementById('copyPixBtn');
+
+const fireworks = document.getElementById('fireworks');
+const winMainText = document.getElementById('winMainText');
+const winSubText = document.getElementById('winSubText');
+
+const spinSound = document.getElementById('spinSound');
+const winSound = document.getElementById('winSound');
+const bigWinSound = document.getElementById('bigWinSound');
+
+let soundEnabled = true;
+
+const symbols = [
+  '🐯', '🍀', '⭐', '💎', '🍒', '🍋', '🔔', '7️⃣', '🍉'
+];
+
+function updateDisplays() {
+  addAmountDisplay.textContent = addAmounts[currentAddIndex];
+  betValueDisplay.textContent = `R$ ${betAmounts[currentBetIndex]}`;
+  balanceDisplay.textContent = `Saldo: R$ ${balance}`;
+}
+
+function playSound(sound) {
+  if (!soundEnabled) return;
+  sound.currentTime = 0;
+  sound.play();
+}
+
+cycleAddAmountBtn.onclick = () => {
+  currentAddIndex++;
+  if (currentAddIndex >= addAmounts.length) currentAddIndex = 0;
+  updateDisplays();
+};
+
+addBalanceBtn.onclick = () => {
+  balance += addAmounts[currentAddIndex];
+  updateDisplays();
+};
+
+decreaseBetBtn.onclick = () => {
+  if (currentBetIndex > 0) {
+    currentBetIndex--;
+    updateDisplays();
   }
+};
+
+increaseBetBtn.onclick = () => {
+  if (currentBetIndex < betAmounts.length - 1) {
+    currentBetIndex++;
+    updateDisplays();
+  }
+};
+
+speedBtn.onclick = () => {
+  spinSpeed++;
+  if (spinSpeed > maxSpeed) spinSpeed = 1;
+  speedBtn.textContent = spinSpeed === 1 ? '⏩' : spinSpeed === 2 ? '⏩⏩' : '⏩⏩⏩';
+};
+
+muteBtn.onclick = () => {
+  soundEnabled = !soundEnabled;
+  muteBtn.textContent = soundEnabled ? '🔊' : '🔇';
+};
+
+copyPixBtn.onclick = () => {
+  navigator.clipboard.writeText(pixKeySpan.textContent).then(() => {
+    alert('Chave Pix copiada!');
+  });
+};
+
+function spinAnimation(reel, symbol) {
+  return new Promise((resolve) => {
+    let position = 0;
+    const totalSteps = 30 * spinSpeed; // mais rápido = menos tempo
+    const stepTime = 20 / spinSpeed;
+
+    const interval = setInterval(() => {
+      reel.textContent = symbols[position % symbols.length];
+      position++;
+      if (position > totalSteps) {
+        clearInterval(interval);
+        reel.textContent = symbol;
+        resolve();
+      }
+    }, stepTime);
+  });
 }
 
-function atualizarPainel() {
-  balanceEl.textContent = balance.toFixed(2);
-  betEl.textContent = bet.toFixed(2);
-  atualizarQRCode();
-  atualizarBotoesEstado();
+function getRandomSymbol() {
+  const idx = Math.floor(Math.random() * symbols.length);
+  return symbols[idx];
 }
 
-function atualizarBotoesEstado() {
-  betPlusBtn.disabled = bet + 10 > balance;
-  betMinusBtn.disabled = bet - 10 < 10;
-  spinBtn.disabled = spinning || bet > balance;
-  addBalanceBtn.disabled = spinning;
-  speedUpBtn.disabled = spinning;
+function checkWin(resultSymbols) {
+  // Vitória simples: se os 3 símbolos iguais na linha
+  if (resultSymbols[0] === resultSymbols[1] && resultSymbols[1] === resultSymbols[2]) {
+    return true;
+  }
+  return false;
 }
 
-function atualizarQRCode() {
-  qrCodeImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=pix:${pixKey}`;
+function isMaxWin(amount) {
+  // Definir valor máximo de ganho aqui
+  return amount >= 500; // exemplo: 500 ou mais é máximo
 }
 
-function girar() {
+async function spin() {
   if (spinning) return;
-  if (bet > balance) {
-    messageEl.textContent = "Saldo insuficiente para apostar.";
+  if (balance < betAmounts[currentBetIndex]) {
+    alert('Saldo insuficiente para apostar.');
     return;
   }
   spinning = true;
-  balance -= bet;
-  atualizarPainel();
-  messageEl.textContent = "Girando...";
 
-  let ticks = 0;
-  const maxTicks = 20;
+  playSound(spinSound);
 
-  spinInterval = setInterval(() => {
-    for (let cell of currentSlots) {
-      cell.textContent = slotItems[Math.floor(Math.random() * slotItems.length)];
+  balance -= betAmounts[currentBetIndex];
+  updateDisplays();
+
+  // Simular sorteio rolando verticalmente
+  const finalSymbols = [];
+  for (let i = 0; i < 3; i++) {
+    finalSymbols[i] = getRandomSymbol();
+  }
+
+  // Anima reels (rolagem vertical simulada)
+  const promises = reels.map((reel, i) => spinAnimation(reel, finalSymbols[i]));
+  await Promise.all(promises);
+
+  const won = checkWin(finalSymbols);
+
+  if (won) {
+    let winAmount = betAmounts[currentBetIndex] * 10; // exemplo multiplicador
+    balance += winAmount;
+    updateDisplays();
+
+    if (isMaxWin(winAmount)) {
+      // Vitória máxima - animação especial
+      winMainText.textContent = 'GRANDE GANHO';
+      winSubText.textContent = 'Parabéns!!';
+      fireworks.classList.remove('hidden');
+      playSound(bigWinSound);
+
+      await new Promise((r) => setTimeout(r, 2000));
+      fireworks.classList.add('hidden');
+    } else {
+      // Vitória normal
+      fireworks.classList.remove('hidden');
+      winMainText.textContent = '';
+      winSubText.textContent = '';
+      playSound(winSound);
+      await new Promise((r) => setTimeout(r, 2000));
+      fireworks.classList.add('hidden');
     }
-    ticks++;
-    if (ticks >= maxTicks) {
-      clearInterval(spinInterval);
-      spinning = false;
-      verificarResultado();
-    }
-  }, speed);
-  atualizarBotoesEstado();
+  }
+
+  spinning = false;
 }
 
-function verificarResultado() {
-  const values = currentSlots.map(cell => cell.textContent);
+spinBtn.onclick = spin;
 
-  const linhas = [[0,1,2],[3,4,5],[6,7,8]];
-  const diagonais = [[0,4,8],[2,4,6]];
-
-  let ganhou = false;
-  for (const linha of linhas) {
-    if (values[linha[0]] === values[linha[1]] && values[linha[1]] === values[linha[2]]) {
-      ganhou = true;
-      break;
-    }
-  }
-  if (!ganhou) {
-    for (const diag of diagonais) {
-      if (values[diag[0]] === values[diag[1]] && values[diag[1]] === values[diag[2]]) {
-        ganhou = true;
-        break;
-      }
-    }
-  }
-
-  if (ganhou) {
-    balance += bet * 5;
-    messageEl.textContent = `Você ganhou! + R$${(bet * 5).toFixed(2)}`;
-  } else {
-    messageEl.textContent = "Tente novamente!";
-  }
-
-  atualizarPainel();
-}
-
-function aumentarVelocidade() {
-  if (speed > 50) {
-    speed -= 50;
-    messageEl.textContent = "Velocidade aumentada!";
-  } else {
-    messageEl.textContent = "Velocidade máxima!";
-  }
-}
-
-addBalanceBtn.addEventListener("click", () => {
-  if (!spinning) {
-    balance += 50;
-    atualizarPainel();
-    messageEl.textContent = "Saldo aumentado em R$50!";
-  }
-});
-
-betPlusBtn.addEventListener("click", () => {
-  if (!spinning && bet + 10 <= balance) {
-    bet += 10;
-    atualizarPainel();
-  }
-});
-
-betMinusBtn.addEventListener("click", () => {
-  if (!spinning && bet - 10 >= 10) {
-    bet -= 10;
-    atualizarPainel();
-  }
-});
-
-spinBtn.addEventListener("click", girar);
-speedUpBtn.addEventListener("click", aumentarVelocidade);
-
-criarGrid();
-atualizarPainel();
-
-
-function copyPixKey() {
-  const key = document.getElementById("pix-key").innerText;
-  navigator.clipboard.writeText(key).then(() => {
-    const btn = document.getElementById("copy-btn");
-    btn.innerText = "Copiado!";
-    setTimeout(() => (btn.innerText = "Copiar"), 2000);
-  });
-}
+updateDisplays();
