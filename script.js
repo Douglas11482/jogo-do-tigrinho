@@ -4,6 +4,8 @@ const resultadoEl = document.getElementById('resultado');
 const saldoEl = document.getElementById('saldo');
 const btnGirar = document.getElementById('btnGirar');
 const btnSalvarConfig = document.getElementById('btnSalvarConfig');
+const somGiro = document.getElementById('somGiro');
+const somGanhou = document.getElementById('somGanhou');
 
 let saldo = 50;
 let custoGiro = 2;
@@ -45,6 +47,9 @@ function girar() {
   resultadoEl.textContent = '🎲 Girando...';
   girando = true;
 
+  somGiro.currentTime = 0;
+  somGiro.play();
+
   let contador = 0;
   giroInterval = setInterval(() => {
     let resultado = '';
@@ -67,6 +72,8 @@ function verificarResultado(resultado) {
     saldo += premio;
     atualizarSaldo();
     resultadoEl.textContent = `🎉 Você ganhou R$${premio.toFixed(2)}!`;
+    somGanhou.currentTime = 0;
+    somGanhou.play();
   } else {
     resultadoEl.textContent = '🙁 Não foi dessa vez!';
   }
