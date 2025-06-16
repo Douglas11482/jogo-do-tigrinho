@@ -185,4 +185,31 @@
 
     <div id="pix-area">
       <p>❤️ Apoie este projeto</p>
-      <
+      <p>Chave Pix para doação:</p>
+      <code id="pixKey">f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1</code>
+      <div id="qrcode"></div>
+      <p id="aviso">🔒 Projeto sem fins lucrativos</p>
+    </div>
+  </div>
+
+  <audio id="somGiro" src="sounds/giro.mp3" preload="auto"></audio>
+  <audio id="somGanhou" src="sounds/ganhou.mp3" preload="auto"></audio>
+
+  <!-- QRCode.js -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+  <script src="script.js"></script>
+  <script>
+    // Gera QR code menor ao lado direito
+    const pixKey = document.getElementById("pixKey").textContent.trim();
+    new QRCode(document.getElementById("qrcode"), {
+      text: pixKey,
+      width: 140,
+      height: 140,
+      colorDark: "#fc4a1a",
+      colorLight: "#fff7e6",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  </script>
+</body>
+</html>
