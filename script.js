@@ -1,95 +1,69 @@
 
-const simbolos = ["🐯", "🍒", "💎", "🔔", "🍋"];
+const rolos = ["🐯", "🍒", "💎", "🍋", "7️⃣", "🍀"];
+let saldo = 50;
+let custoGiro = 2;
+let premio = 15;
 
-let saldo = 50.0;
-let custoPorGiro = 2.0;
-let premio = 15.0;
-
-const slotEl = document.getElementById("rolo");
-const resultadoEl = document.getElementById("resultado");
 const saldoEl = document.getElementById("saldo");
+const resultadoEl = document.getElementById("resultado");
 const btnGirar = document.getElementById("btnGirar");
-const btnSalvarConfig = document.getElementById("btnSalvarConfig");
-const saldoInicialInput = document.getElementById("saldoInicial");
-const custoGiroInput = document.getElementById("custoGiro");
-const premioInput = document.getElementById("premio");
 const somGiro = document.getElementById("somGiro");
 const somGanhou = document.getElementById("somGanhou");
 
-function atualizarSaldo() {
-  saldoEl.innerText = `💰 Saldo: R$${saldo.toFixed(2)}`;
-}
+const rolo1 = document.getElementById("rolo1");
+const rolo2 = document.getElementById("rolo2");
+const rolo3 = document.getElementById("rolo3");
 
-function carregarConfig() {
-  const config = localStorage.getItem("configJogoTigrinho");
-  if (config) {
-    const obj = JSON.parse(config);
-    saldo = obj.saldo;
-    custoPorGiro = obj.custoPorGiro;
-    premio = obj.premio;
-    saldoInicialInput.value = saldo;
-    custoGiroInput.value = custoPorGiro;
-    premioInput.value = premio;
-  }
+document.getElementById("btnSalvarConfig").onclick = () => {
+  saldo = parseFloat(document.getElementById("saldoInicial").value);
+  custoGiro = parseFloat(document.getElementById("custoGiro").value);
+  premio = parseFloat(document.getElementById("premio").value);
   atualizarSaldo();
-}
+};
 
-function salvarConfig() {
-  saldo = parseFloat(saldoInicialInput.value);
-  custoPorGiro = parseFloat(custoGiroInput.value);
-  premio = parseFloat(premioInput.value);
-
-  if (isNaN(saldo) || saldo < 0) saldo = 50.0;
-  if (isNaN(custoPorGiro) || custoPorGiro < 0) custoPorGiro = 2.0;
-  if (isNaN(premio) || premio < 0) premio = 15.0;
-
-  localStorage.setItem(
-    "configJogoTigrinho",
-    JSON.stringify({ saldo, custoPorGiro, premio })
-  );
-  atualizarSaldo();
-  resultadoEl.innerText = "⚙️ Configurações salvas!";
-}
-
-function girar() {
-  if (saldo < custoPorGiro) {
-    resultadoEl.innerText = "⚠️ Saldo insuficiente!";
+btnGirar.onclick = async () => {
+  if (saldo < custoGiro) {
+    resultadoEl.textContent = "Saldo insuficiente.";
     return;
   }
 
-  saldo -= custoPorGiro;
+  saldo -= custoGiro;
   atualizarSaldo();
-
+  resultadoEl.textContent = "Girando...";
   somGiro.play();
+  btnGirar.disabled = true;
 
-  // Animação piscar
-  slotEl.classList.add("animar");
+  await animarRolos();
 
-  setTimeout(() => {
-    slotEl.classList.remove("animar");
+  const simbolos = [rolo1.textContent, rolo2.textContent, rolo3.textContent];
+  const ganhou = simbolos.every((val, i, arr) => val === arr[0]);
 
-    const rolo = [
-      simbolos[Math.floor(Math.random() * simbolos.length)],
-      simbolos[Math.floor(Math.random() * simbolos.length)],
-      simbolos[Math.floor(Math.random() * simbolos.length)],
-    ];
+  if (ganhou) {
+    resultadoEl.textContent = "🎉 Você ganhou!";
+    saldo += premio;
+    somGanhou.play();
+  } else {
+    resultadoEl.textContent = "❌ Tente novamente!";
+  }
+  atualizarSaldo();
+  btnGirar.disabled = false;
+};
 
-    slotEl.innerText = rolo.join(" | ");
-
-    if (rolo[0] === rolo[1] && rolo[1] === rolo[2]) {
-      resultadoEl.innerText = `🎉 Você ganhou R$${premio.toFixed(2)}!`;
-      saldo += premio;
-      atualizarSaldo();
-      somGanhou.play();
-    } else {
-      resultadoEl.innerText = "❌ Não foi dessa vez.";
-    }
-  }, 600);
+function atualizarSaldo() {
+  saldoEl.textContent = `💰 Saldo: R$${saldo.toFixed(2)}`;
 }
 
-// Eventos
-btnGirar.addEventListener("click", girar);
-btnSalvarConfig.addEventListener("click", salvarConfig);
+async function animarRolos() {
+  for (let i = 0; i < 15; i++) {
+    rolo1.textContent = rolos[Math.floor(Math.random() * rolos.length)];
+    rolo2.textContent = rolos[Math.floor(Math.random() * rolos.length)];
+    rolo3.textContent = rolos[Math.floor(Math.random() * rolos.length)];
+    await delay(100);
+  }
+}
 
-// Carregar configurações salvas
-carregarConfig();
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+atualizarSaldo();
