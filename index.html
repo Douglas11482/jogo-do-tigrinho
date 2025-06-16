@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Jogo do Tigrinho</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>🎰 Jogo do Tigrinho</h1>
 
   <div id="painel-config">
-    <label>Saldo inicial: R$ <input type="number" id="saldoInicial" value="50" min="0"/></label>
-    <label>Custo por giro: R$ <input type="number" id="custoGiro" value="2" min="0"/></label>
+    <label>Saldo inicial: R$ <input type="number" id="saldoInicial" value="50" min="0"></label>
+    <label>Custo por giro: R$ <input type="number" id="custoGiro" value="2" min="0"></label>
     <button id="btnSalvarConfig">Salvar Configurações</button>
   </div>
 
@@ -29,6 +28,7 @@
   <audio id="somGiro" src="sounds/giro.mp3" preload="auto"></audio>
   <audio id="somGanhou" src="sounds/ganhou.mp3" preload="auto"></audio>
 
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

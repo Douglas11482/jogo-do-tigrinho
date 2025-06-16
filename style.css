@@ -5,19 +5,22 @@ body {
   font-family: sans-serif;
   color: #fff;
   text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 h1 {
   margin-top: 20px;
   color: #ffcc00;
+  text-shadow: 0 0 5px #ffcc00;
 }
 #painel-config {
   background: #003366;
   padding: 10px 20px;
   border-radius: 8px;
   margin: 15px auto;
-  width: 320px;
+  max-width: 320px;
   color: #fff;
-  text-align:left;
+  text-align: left;
 }
 #painel-config label {
   display: block;
@@ -26,8 +29,8 @@ h1 {
 #painel-config input {
   width: 80px;
   padding: 4px;
-  border-radius: 4px;
   border: none;
+  border-radius: 4px;
   text-align: center;
 }
 button {
@@ -55,7 +58,7 @@ button {
   box-shadow: 0 0 20px 8px #ff0;
 }
 @keyframes piscar {
-  0%,100% { background-color: #002244; }
+  0%,100% { background-color: #002244; color: #ffcc00; }
   50% { background-color: #ffee00; color: #002244; }
 }
 #resultado {
@@ -85,9 +88,9 @@ button {
   box-shadow: 0 0 10px #ffcc00;
 }
 #qrcode {
-  margin: auto;
   width: 120px;
   height: 120px;
+  margin: auto;
 }
 #aviso {
   margin-top: 10px;

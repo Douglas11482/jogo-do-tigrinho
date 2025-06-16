@@ -6,67 +6,53 @@ new QRCode(document.getElementById("qrcode"), {
 
 // Elementos
 const rolo = document.getElementById("rolo");
-const resultadoEl = document.getElementById("resultado");
-const saldoEl = document.getElementById("saldo");
-const btnGirar = document.getElementById("btnGirar");
-const btnSalvar = document.getElementById("btnSalvarConfig");
-const inpSaldo = document.getElementById("saldoInicial");
-const inpCusto = document.getElementById("custoGiro");
-const somGiro = document.getElementById("somGiro");
-const somWin = document.getElementById("somGanhou");
+const resEl = document.getElementById("resultado");
+const sdEl = document.getElementById("saldo");
+const btnG = document.getElementById("btnGirar");
+const btnS = document.getElementById("btnSalvarConfig");
+const inpSd = document.getElementById("saldoInicial");
+const inpCt = document.getElementById("custoGiro");
+const sg = document.getElementById("somGiro");
+const sw = document.getElementById("somGanhou");
 
 // Variáveis
-let saldo = parseFloat(inpSaldo.value);
-let custo = parseFloat(inpCusto.value);
+let saldo = parseFloat(inpSd.value);
+let custo = parseFloat(inpCt.value);
 const mult = { "🐯":10, "💎":5, "🍒":2 };
 
 // Atualiza saldo
-function atualizarSaldo() {
-  saldoEl.innerText = `💰 Saldo: R$${saldo.toFixed(2)}`;
+function atualiza() {
+  sdEl.innerText = `💰 Saldo: R$${saldo.toFixed(2)}`;
 }
-btnSalvar.onclick = () => {
-  saldo = parseFloat(inpSaldo.value) || saldo;
-  custo = parseFloat(inpCusto.value) || custo;
-  atualizarSaldo();
-  resultadoEl.innerText = "";
+btnS.onclick = () => {
+  saldo = parseFloat(inpSd.value) || saldo;
+  custo = parseFloat(inpCt.value) || custo;
+  atualiza();
+  resEl.innerText = "";
 };
 
-// Função de giro
-btnGirar.onclick = () => {
-  if (saldo < custo) {
-    resultadoEl.innerText = "Saldo insuficiente!";
-    return;
-  }
-  saldo -= custo;
-  atualizarSaldo();
-  somGiro.currentTime = 0; somGiro.play();
-  resultadoEl.innerText = "Girando...";
+// Giro
+btnG.onclick = () => {
+  if (saldo < custo) { resEl.innerText="Saldo insuficiente!"; return; }
+  saldo -= custo; atualiza();
+  sg.currentTime=0; sg.play();
+  resEl.innerText="Girando...";
   rolo.classList.remove("win");
-
-  let cont = 0;
-  let final = [];
-  const intervalo = setInterval(() => {
-    final = [0,1,2].map(() => {
-      const keys = Object.keys(mult);
-      return keys[Math.floor(Math.random() * keys.length)];
-    });
+  let cnt=0, final=[];
+  const iv = setInterval(()=>{
+    final=[...Array(3)].map(()=>Object.keys(mult)[Math.floor(Math.random()*3)]);
     rolo.innerText = final.join(" ");
-    cont++;
-    if (cont > 15) {
-      clearInterval(intervalo);
-      const [a,b,c] = final;
-      if (a===b && b===c) {
-        const ganho = custo * mult[a];
-        saldo += ganho; atualizarSaldo();
-        resultadoEl.innerText = `🎉 Ganhou R$${ganho.toFixed(2)}!`;
+    if(++cnt>15){
+      clearInterval(iv);
+      const [a,b,c]=final;
+      if(a===b&&b===c){
+        const ganho=custo*mult[a];
+        saldo+=ganho; atualiza();
+        resEl.innerText=`🎉 Ganhou R$${ganho.toFixed(2)}!`;
         rolo.classList.add("win");
-        somWin.currentTime = 0; somWin.play();
-      } else {
-        resultadoEl.innerText = "😿 Tente novamente";
-      }
+        sw.currentTime=0; sw.play();
+      } else resEl.innerText="😿 Tente novamente";
     }
-  }, 100);
+  },100);
 };
-
-// Inicia
-atualizarSaldo();
+atualiza();
