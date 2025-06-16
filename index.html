@@ -1,35 +1,50 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Jogo do Tigrinho</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jogo do Tigrinho - Slot 3x3</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>🎰 Jogo do Tigrinho</h1>
-    <canvas id="tigrinho-bg"></canvas>
-    <div id="slot-machine">
-      <div id="grid"></div>
+    <header>
+      <h1>Jogo do Tigrinho</h1>
+      <p class="subtitle">Doe para ajudar 🐯</p>
+      <button id="add-balance-button" class="btn-add-balance">Adicionar saldo +50</button>
+    </header>
+
+    <div class="game-area">
+      <div id="slot-grid" class="slot-grid"></div>
+
       <div class="controls">
-        <div class="panel">
-          <label>Saldo: R$ <span id="balance">1000</span></label>
-          <label>Aposta: R$ <input type="number" id="bet" value="10" min="1" /></label>
+        <div class="balance-aposta">
+          <div>Saldo: R$ <span id="balance">100</span></div>
+          <div>Aposta: R$ <span id="bet">10</span></div>
         </div>
+
         <div class="buttons">
-          <button id="spin">GIRAR</button>
-          <button id="fast-spin">ACELERAR</button>
+          <button id="speed-up-button" class="btn-speed-small">Acelerar</button>
+          <button id="spin-button" class="btn-spin-big">Girar</button>
+          <button id="bet-minus" class="btn-small">-</button>
+          <button id="bet-plus" class="btn-small">+</button>
         </div>
-        <div id="message"></div>
+
+        <div id="message" class="message"></div>
       </div>
     </div>
-    <p class="donate-text">Doe para ajudar</p>
-    <img id="qrcode" src="https://api.qrserver.com/v1/create-qr-code/?data=suachavepix%40email.com&size=150x150" alt="QR Code Pix" />
-    <p class="footer">Jogo sem fins lucrativos.</p>
-    <audio id="spin-sound" src="https://actions.google.com/sounds/v1/ambiences/slot_machine.ogg"></audio>
-    <audio id="win-sound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"></audio>
+
+    <div class="qr-code-area">
+      <h2>Doe via Pix</h2>
+      <img id="qr-code" src="" alt="QR Code Pix" />
+      <p class="pix-key">Chave Pix: <strong>seu-pix@exemplo.com</strong></p>
+    </div>
+
+    <footer>
+      <p>Jogo sem fins lucrativos</p>
+    </footer>
   </div>
-  <script src="script.js"></script>
+
+<script src="script.js"></script>
 </body>
 </html>
