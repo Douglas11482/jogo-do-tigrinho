@@ -2,41 +2,68 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jogo do Tigrinho - Slot Machine</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Jogo do Tigrinho - Doação Pix com QR Code</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 400px;
+      margin: auto;
+      text-align: center;
+    }
+    #doacao {
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 30px;
+    }
+    code {
+      display: block;
+      margin: 10px 0;
+      font-size: 1.2em;
+      word-break: break-word;
+      background: #f0f0f0;
+      padding: 5px 10px;
+      border-radius: 4px;
+    }
+    #qrcode {
+      margin-top: 15px;
+    }
+    p {
+      margin: 0;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🎰 Jogo do Tigrinho</h1>
 
-    <div id="painel-config">
-      <h2>⚙️ Configurações</h2>
-      <label>Saldo inicial: R$ <input type="number" id="saldoInicial" value="50" min="0" /></label><br/>
-      <label>Custo por giro: R$ <input type="number" id="custoGiro" value="2" min="0" /></label><br/>
-      <label>Prêmio por vitória: R$ <input type="number" id="premio" value="15" min="0" /></label><br/>
-      <button id="btnSalvarConfig">Salvar Configurações</button>
-    </div>
+  <h1>❤️ Apoie o Jogo do Tigrinho</h1>
 
-    <div id="slot-container">
-      <div id="rolo">🐯 🍒 💎</div>
-      <div id="resultado"></div>
-      <div id="saldo">💰 Saldo: R$50.00</div>
-      <button id="btnGirar">🎲 Girar</button>
-    </div>
-
-    <div id="doacao">
-      <p>❤️ Apoie este projeto (sem fins lucrativos)</p>
-      <p>Chave Pix para doação:</p>
-      <code>f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1</code>
-    </div>
-
-    <p id="aviso">🔒 Este projeto é apenas para fins educacionais e sem fins lucrativos.</p>
+  <div id="doacao">
+    <p>Chave Pix para doação:</p>
+    <code id="pixKey">f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1</code>
+    <div id="qrcode"></div>
   </div>
 
-  <audio id="somGiro" src="sounds/giro.mp3" preload="auto"></audio>
-  <audio id="somGanhou" src="sounds/ganhou.mp3" preload="auto"></audio>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script>
+    // Aqui está a chave Pix
+    const pixKey = "f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1";
 
-  <script src="script.js"></script>
+    // Para gerar QR code Pix, o padrão é o Pix Copia e Cola,
+    // mas aqui só faremos um QR básico do texto da chave.
+    // Se quiser um QR Pix oficial, teria que montar o payload Pix.
+    // Vou gerar um QR com a chave pura.
+
+    new QRCode(document.getElementById("qrcode"), {
+      text: pixKey,
+      width: 200,
+      height: 200,
+      colorDark: "#000000",
+      colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  </script>
+  
 </body>
 </html>
