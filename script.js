@@ -1,99 +1,133 @@
-const simbolos = ["🐯", "🍒", "💎"];
-const multiplicadores = { "🐯": 10, "💎": 5, "🍒": 2 };
+// símbolos e seus valores de prêmio multiplicadores
+const simbolos = [
+  { emoji: "🐯", premio: 10 },
+  { emoji: "💎", premio: 5 },
+  { emoji: "🍒", premio: 2 }
+];
 
 let saldo = 50;
-let valorAposta = 2;
-let velocidade = 1000;
+const aposta = 2;
+let velocidadeGiro = 300; // ms por troca
+let girando = false;
 
-function atualizarSaldo() {
-  document.getElementById("saldo").textContent = `💰 Saldo: R$${saldo.toFixed(2)}`;
+const saldoEl = document.getElementById("saldo");
+const resultadoEl = document.getElementById("resultado");
+const roletaCells = Array.from(document.querySelectorAll(".slot-cell"));
+const btnGirar = document.getElementById("btnGirar");
+const btnAcelerar = document.getElementById("btnAcelerar");
+const somGiro = document.getElementById("somGiro");
+const somGanhou = document.getElementById("somGanhou");
+
+// atualiza saldo na tela
+function atualizaSaldo() {
+  saldoEl.textContent = `💰 Saldo: R$ ${saldo.toFixed(2)}`;
 }
 
-function gerarRoleta() {
-  const roleta = [];
-  for (let i = 0; i < 3; i++) {
-    const linha = [];
-    for (let j = 0; j < 3; j++) {
-      const simbolo = simbolos[Math.floor(Math.random() * simbolos.length)];
-      linha.push(simbolo);
-    }
-    roleta.push(linha);
-  }
-  return roleta;
+// sorteia um símbolo aleatório
+function simboloAleatorio() {
+  const idx = Math.floor(Math.random() * simbolos.length);
+  return simbolos[idx];
 }
 
-function exibirRoleta(roleta) {
-  const roletaDiv = document.getElementById("roleta");
-  roletaDiv.innerHTML = "";
-  roleta.flat().forEach(simbolo => {
-    const div = document.createElement("div");
-    div.textContent = simbolo;
-    roletaDiv.appendChild(div);
+// exibe símbolos na roleta
+function exibirSimbolos(simbolosEscolhidos) {
+  roletaCells.forEach((cell, i) => {
+    cell.textContent = simbolosEscolhidos[i].emoji;
+    cell.dataset.symbol = simbolosEscolhidos[i].emoji;
+    cell.classList.remove("winning");
   });
 }
 
-function verificarVitoria(roleta) {
-  const linhas = [...roleta];
-  const diagonais = [
-    [roleta[0][0], roleta[1][1], roleta[2][2]],
-    [roleta[0][2], roleta[1][1], roleta[2][0]]
+// verifica vitórias horizontais e diagonais
+function verificarVitoria(simbolosEscolhidos) {
+  // índices para linhas horizontais e diagonais
+  const linhas = [
+    [0,1,2],
+    [3,4,5],
+    [6,7,8],
+    [0,4,8], // diagonal principal
+    [2,4,6]  // diagonal secundária
   ];
 
-  const vitorias = [...linhas, ...diagonais].filter(linha =>
-    linha.every(s => s === linha[0])
-  );
+  let ganhou = false;
+  let premioTotal = 0;
+  let posicoesVencedoras = [];
 
-  if (vitorias.length > 0) {
-    const simbolo = vitorias[0][0];
-    return valorAposta * multiplicadores[simbolo];
+  for (const linha of linhas) {
+    const [a,b,c] = linha;
+    if (simbolosEscolhidos[a].emoji === simbolosEscolhidos[b].emoji &&
+        simbolosEscolhidos[b].emoji === simbolosEscolhidos[c].emoji) {
+      ganhou = true;
+      const premioSimbolo = simbolos.find(s => s.emoji === simbolosEscolhidos[a].emoji).premio;
+      premioTotal += premioSimbolo * aposta;
+      posicoesVencedoras.push(...linha);
+    }
   }
-  return 0;
+  return { ganhou, premioTotal, posicoesVencedoras };
 }
 
-document.getElementById("btnSalvarConfig").onclick = () => {
-  const novoSaldo = parseFloat(document.getElementById("saldoInicial").value);
-  const novaAposta = parseFloat(document.getElementById("valorAposta").value);
-  const novaVelocidade = parseInt(document.getElementById("velocidade").value);
-
-  if (!isNaN(novoSaldo)) saldo = novoSaldo;
-  if (!isNaN(novaAposta)) valorAposta = novaAposta;
-  if (!isNaN(novaVelocidade)) velocidade = novaVelocidade;
-
-  atualizarSaldo();
-};
-
-document.getElementById("btnGirar").onclick = () => {
-  if (saldo < valorAposta) {
-    alert("Saldo insuficiente!");
+// anima o giro da roleta
+async function girar() {
+  if (girando) return;
+  if (saldo < aposta) {
+    resultadoEl.textContent = "Saldo insuficiente!";
     return;
   }
-
-  const somGiro = document.getElementById("somGiro");
+  girando = true;
+  resultadoEl.textContent = "";
+  saldo -= aposta;
+  atualizaSaldo();
   somGiro.currentTime = 0;
   somGiro.play();
 
-  saldo -= valorAposta;
-  atualizarSaldo();
+  let ciclos = 20; // quantas vezes muda antes de parar
+  let simbolosEscolhidos = [];
 
-  const roleta = gerarRoleta();
-  exibirRoleta(roleta);
-
-  setTimeout(() => {
-    const premio = verificarVitoria(roleta);
-    const resultadoDiv = document.getElementById("resultado");
-
-    if (premio > 0) {
-      saldo += premio;
-      resultadoDiv.textContent = `🎉 Você ganhou R$${premio.toFixed(2)}!`;
-      const somGanhou = document.getElementById("somGanhou");
-      somGanhou.currentTime = 0;
-      somGanhou.play();
-    } else {
-      resultadoDiv.textContent = "💔 Tente novamente!";
+  for (let i=0; i< ciclos; i++) {
+    simbolosEscolhidos = [];
+    for (let j=0; j<9; j++) {
+      simbolosEscolhidos.push(simboloAleatorio());
     }
+    exibirSimbolos(simbolosEscolhidos);
+    await new Promise(r => setTimeout(r, velocidadeGiro));
+  }
 
-    atualizarSaldo();
-  }, velocidade);
-};
+  somGiro.pause();
 
-window.onload = atualizarSaldo;
+  // verificar vitória
+  const { ganhou, premioTotal, posicoesVencedoras } = verificarVitoria(simbolosEscolhidos);
+  if (ganhou) {
+    somGanhou.currentTime = 0;
+    somGanhou.play();
+    saldo += premioTotal;
+    atualizaSaldo();
+    resultadoEl.textContent = `🎉 Você ganhou R$ ${premioTotal.toFixed(2)}!`;
+
+    // destacar células vencedoras
+    posicoesVencedoras.forEach(i => roletaCells[i].classList.add("winning"));
+  } else {
+    resultadoEl.textContent = "Tente novamente!";
+  }
+
+  girando = false;
+}
+
+btnGirar.addEventListener("click", girar);
+
+btnAcelerar.addEventListener("click", () => {
+  // alterna velocidade entre 300ms e 100ms
+  velocidadeGiro = velocidadeGiro === 300 ? 100 : 300;
+  btnAcelerar.textContent = velocidadeGiro === 100 ? "Desacelerar Giro" : "Acelerar Giro";
+});
+
+// inicializa saldo
+atualizaSaldo();
+
+// gera QR Code Pix
+const chavePix = "f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1";
+const valorPix = "10.00";
+const qrContent = `00020126360014BR.GOV.BCB.PIX0114${chavePix}0208Compra520400005303986540${valorPix}5802BR5925Jogo do Tigrinho6009Sao Paulo61080540900062070503***6304`;
+
+QRCode.toCanvas(document.getElementById('qrcode'), qrContent, { width: 120 }, function (error) {
+  if (error) console.error(error);
+});
