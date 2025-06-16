@@ -5,10 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Jogo do Tigrinho - Slot Machine</title>
   <style>
-    /* Fundo azul */
+    /* Fundo azul com tigrinho */
     body {
       margin: 0;
-      background: #004d99; /* azul escuro */
+      background: #004d99 url('images/tigrinho-fundo.png') no-repeat bottom left;
+      background-size: 180px auto;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       color: #fff;
       display: flex;
@@ -16,33 +17,13 @@
       padding: 20px;
       height: 100vh;
       box-sizing: border-box;
-      overflow: hidden;
       position: relative;
-    }
-
-    /* Animação do tigrinho no fundo */
-    #tigrinho-fundo {
-      position: fixed;
-      bottom: 0;
-      left: -200px;
-      width: 180px;
-      height: 180px;
-      background: url('images/tigrinho.gif') no-repeat;
-      background-size: contain;
-      animation: andar 15s linear infinite;
-      opacity: 0.15;
-      pointer-events: none;
-      user-select: none;
-      z-index: 0;
-    }
-    @keyframes andar {
-      0% { left: -200px; }
-      100% { left: 100vw; }
+      overflow: hidden;
     }
 
     /* Container geral */
     .container {
-      background: #003366; /* tom mais escuro do azul */
+      background: #003366;
       border-radius: 15px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.7);
       display: flex;
@@ -122,121 +103,4 @@
     }
     #rolo.win {
       animation: glow 1.5s ease-in-out 2;
-      box-shadow: 0 0 40px 10px #ffcc00;
-    }
-    @keyframes glow {
-      0%, 100% { box-shadow: 0 0 20px 8px #ffcc00; }
-      50% { box-shadow: 0 0 40px 20px #ffcc00; }
-    }
-    #resultado {
-      font-weight: 700;
-      font-size: 1.5rem;
-      height: 1.8em;
-      color: #ffff66;
-      margin-bottom: 15px;
-      min-height: 28px;
-      text-shadow: 0 0 5px #ffaa00;
-    }
-    #saldo {
-      font-size: 1.3rem;
-      margin-bottom: 25px;
-      font-weight: 600;
-      color: #ffee88;
-      text-shadow: 0 0 6px #ffaa00;
-    }
-    #btnGirar {
-      background-color: #ffcc00;
-      border: none;
-      padding: 15px 40px;
-      font-size: 1.3rem;
-      border-radius: 12px;
-      cursor: pointer;
-      font-weight: 700;
-      color: #003366;
-      box-shadow: 0 4px 10px #d3a11c;
-      transition: background-color 0.3s ease;
-      user-select: none;
-    }
-    #btnGirar:hover {
-      background-color: #e6b800;
-    }
-
-    /* Área do Pix + QR Code */
-    #pix-area {
-      width: 220px;
-      background: #001f4d;
-      border-radius: 15px;
-      box-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
-      padding: 25px 15px;
-      text-align: center;
-      user-select: none;
-      color: #ffee88;
-      font-weight: 700;
-    }
-    #pix-area p {
-      margin-bottom: 8px;
-      color: #ffcc00;
-      font-size: 1.2rem;
-    }
-    #pixKey {
-      font-family: monospace;
-      background: #003366;
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 1rem;
-      color: #ffcc00;
-      word-break: break-word;
-      margin-bottom: 15px;
-      border: 1px solid #ffcc00;
-    }
-    #qrcode {
-      margin: 0 auto;
-      width: 140px;
-      height: 140px;
-      user-select: none;
-    }
-    #aviso {
-      margin-top: 20px;
-      font-style: italic;
-      font-size: 0.85rem;
-      color: #ccc;
-    }
-  </style>
-</head>
-<body>
-
-  <div id="tigrinho-fundo"></div>
-
-  <div class="container">
-    <div id="game-area">
-      <h1>🎰 Jogo do Tigrinho</h1>
-
-      <div id="painel-config">
-        <label>Saldo inicial: R$ <input type="number" id="saldoInicial" value="50" min="0" /></label>
-        <label>Custo por giro: R$ <input type="number" id="custoGiro" value="2" min="0" /></label>
-        <button id="btnSalvarConfig">Salvar Configurações</button>
-        <button id="btnVelocidade">Velocidade: Normal</button>
-      </div>
-
-      <div id="rolo">🐯 🍒 💎</div>
-      <div id="resultado"></div>
-      <div id="saldo">💰 Saldo: R$50.00</div>
-      <button id="btnGirar">🎲 Girar</button>
-    </div>
-
-    <div id="pix-area">
-      <p>❤️ Apoie este projeto</p>
-      <p>Chave Pix para doação:</p>
-      <code id="pixKey">f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1</code>
-      <div id="qrcode"></div>
-      <p id="aviso">🔒 Projeto sem fins lucrativos</p>
-    </div>
-  </div>
-
-  <audio id="somGiro" src="sounds/giro.mp3" preload="auto"></audio>
-  <audio id="somGanhou" src="sounds/ganhou.mp3" preload="auto"></audio>
-
-  <!-- QRCode.js -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-
-  <script src="script.js"></script
+      box-shadow: 0 0 40px 10px #ff
