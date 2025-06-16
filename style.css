@@ -1,181 +1,220 @@
 body {
-  margin: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #0077cc, #004080);
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-  min-height: 100vh;
-  box-sizing: border-box;
-}
-.container {
-  max-width: 400px;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
-  padding: 15px 20px 30px 20px;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  font-family: Arial, sans-serif;
+  background: #007acc;
+  color: white;
   text-align: center;
+  margin: 0;
+  padding: 20px;
   user-select: none;
 }
+
 h1 {
   margin-bottom: 10px;
-  font-weight: 700;
-  font-size: 1.8rem;
-  text-shadow: 1px 1px 3px #000a;
 }
-#add-balance-button.top-button {
-  margin-bottom: 15px;
-  width: 100%;
-  padding: 10px 0;
-  font-weight: 600;
-  border: none;
-  border-radius: 6px;
-  background: #00aaff;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-#add-balance-button.top-button:hover:not(:disabled) {
-  background: #0088cc;
-}
-#add-balance-button.top-button:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-#game-area {
+
+.top-bar {
+  margin-bottom: 20px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-#slot-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 80px);
-  grid-template-rows: repeat(3, 80px);
-  gap: 8px;
-  margin-bottom: 15px;
-  user-select: none;
-}
-.slot-cell {
-  background: #004080;
-  border-radius: 8px;
-  font-size: 3rem;
-  line-height: 80px;
-  color: #ffd700;
-  box-shadow: inset 0 0 8px #ffb700;
-  transition: background-color 0.3s ease;
-}
-.controls {
-  display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 15px;
-  margin-bottom: 15px;
+  gap: 10px;
+  align-items: center;
   flex-wrap: wrap;
 }
-.btn {
-  background: #0066cc;
-  border: none;
-  color: white;
-  cursor: pointer;
-  border-radius: 8px;
-  box-shadow: 0 3px 0 #004080;
-  font-weight: 700;
-  transition: background-color 0.3s ease;
-  user-select: none;
+
+#balance {
+  font-weight: bold;
+  font-size: 1.2em;
 }
-.btn:hover:not(:disabled) {
-  background: #004c99;
-}
-.btn:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
-.small-btn {
-  width: 50px;
-  height: 50px;
-  font-size: 1.5rem;
-  padding: 0;
-  line-height: 50px;
-}
-.spin-btn {
-  width: 110px;
-  height: 60px;
-  font-size: 1.5rem;
-  font-weight: 900;
-  user-select: none;
+
+.slot-machine {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  height: 180px;
+  overflow: hidden;
+  background: #004080;
   border-radius: 10px;
+  padding: 10px;
 }
-.bet-controls {
+
+.reel {
+  width: 100px;
+  height: 180px;
+  background: #003366;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid #0099ff;
+}
+
+.reel img {
+  width: 100%;
+  display: block;
+  user-select: none;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.controls button {
+  cursor: pointer;
+  font-size: 1.1em;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background: #0099ff;
+  color: white;
+  transition: background 0.3s ease;
+}
+
+.controls button:hover {
+  background: #007acc;
+}
+
+.bet-control {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #d0eaff;
-  font-weight: 700;
-  font-size: 1rem;
-  min-width: 140px;
-  justify-content: center;
-}
-.status {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: #ffffcc;
-  text-shadow: 1px 1px 3px #0007;
-}
-#message {
-  flex-grow: 1;
-  text-align: right;
-  font-weight: 600;
-  color: #ffeeaa;
-  min-height: 24px;
-  user-select: text;
-}
-#qr-container {
-  margin-top: 10px;
-  text-align: center;
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: #ccc;
-}
-#qr-container p {
-  margin: 0 0 6px 0;
-}
-#qr-code {
-  width: 180px;
-  height: 180px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px #00aaffaa;
+  gap: 5px;
+  background: #005f9e;
+  padding: 5px 15px;
+  border-radius: 8px;
+  font-weight: bold;
   user-select: none;
-  image-rendering: pixelated;
 }
 
-.warning {
-  font-size: 0.8rem;
-  color: #ffcc00;
-  margin-bottom: 10px;
-}
-.pix-key {
-  font-size: 0.85rem;
-  color: #ffffff;
-  margin-top: 5px;
-  user-select: text;
+.bet-control button {
+  padding: 5px 10px;
+  font-size: 1.1em;
+  background: #007acc;
+  border-radius: 6px;
 }
 
-#copy-btn {
+.bet-control button:hover {
+  background: #005f9e;
+}
+
+#message {
+  margin-bottom: 20px;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.pix-area {
+  margin-top: 20px;
+}
+
+.pix-area img {
+  border: 3px solid white;
+  border-radius: 10px;
+}
+
+.pix-area p {
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.pix-area button {
   margin-left: 10px;
-  font-size: 0.75rem;
-  padding: 2px 6px;
-  background-color: #333;
-  color: #fff;
-  border: 1px solid #555;
-  border-radius: 4px;
+  padding: 5px 10px;
+  font-weight: bold;
   cursor: pointer;
+  border-radius: 6px;
+  border: none;
+  background: #007acc;
+  color: white;
 }
-#copy-btn:hover {
-  background-color: #444;
+
+.pix-area button:hover {
+  background: #005f9e;
+}
+
+/* Fogos de artifício */
+#fireworks {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: yellow;
+  font-weight: 900;
+  text-shadow: 0 0 10px #ff0, 0 0 20px #ff0, 0 0 30px #f80;
+  flex-direction: column;
+}
+
+.firework-left,
+.firework-right {
+  position: absolute;
+  top: 50%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, transparent 70%);
+  animation: fireworksAnim 2s ease-out forwards;
+  opacity: 0;
+}
+
+.firework-left {
+  left: 5%;
+  transform: translateY(-50%);
+  animation-delay: 0s;
+}
+
+.firework-right {
+  right: 5%;
+  transform: translateY(-50%);
+  animation-delay: 0.2s;
+}
+
+@keyframes fireworksAnim {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-50px) scale(1.5);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(0) scale(0.5);
+  }
+}
+
+.win-text {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.win-text h2 {
+  font-size: 4em;
+  margin: 0;
+  color: gold;
+  text-shadow:
+    0 0 5px #fff,
+    0 0 10px gold,
+    0 0 20px gold,
+    0 0 30px orange;
+}
+
+.win-text p {
+  font-size: 2em;
+  margin: 0;
+  color: gold;
+  text-shadow: 0 0 5px #fff;
+}
+
+.hidden {
+  display: none !important;
 }
