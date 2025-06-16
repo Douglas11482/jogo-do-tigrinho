@@ -2,16 +2,14 @@ const simbolos = ['🐯', '🍒', '💎', '🍀', '7️⃣'];
 const rolo = document.getElementById('rolo');
 const resultadoEl = document.getElementById('resultado');
 const saldoEl = document.getElementById('saldo');
-
 const btnGirar = document.getElementById('btnGirar');
 const btnSalvarConfig = document.getElementById('btnSalvarConfig');
 
 let saldo = 50;
 let custoGiro = 2;
 let premio = 15;
-
-let giroInterval;
 let girando = false;
+let giroInterval;
 
 function atualizarSaldo() {
   saldoEl.textContent = `💰 Saldo: R$${saldo.toFixed(2)}`;
@@ -32,21 +30,20 @@ function salvarConfiguracoes() {
   premio = premioValor;
 
   atualizarSaldo();
-  resultadoEl.textContent = 'Configurações salvas!';
+  resultadoEl.textContent = '⚙️ Configurações salvas!';
 }
 
 function girar() {
-  if (girando) return; // evita clicar várias vezes
+  if (girando) return;
   if (saldo < custoGiro) {
-    resultadoEl.textContent = 'Saldo insuficiente para girar!';
+    resultadoEl.textContent = '❌ Saldo insuficiente!';
     return;
   }
 
   saldo -= custoGiro;
   atualizarSaldo();
-
+  resultadoEl.textContent = '🎲 Girando...';
   girando = true;
-  resultadoEl.textContent = 'Girando...';
 
   let contador = 0;
   giroInterval = setInterval(() => {
@@ -55,8 +52,8 @@ function girar() {
       resultado += simbolos[Math.floor(Math.random() * simbolos.length)] + ' ';
     }
     rolo.textContent = resultado.trim();
-
     contador++;
+
     if (contador > 15) {
       clearInterval(giroInterval);
       verificarResultado(rolo.textContent.split(' '));
@@ -65,19 +62,16 @@ function girar() {
   }, 100);
 }
 
-function verificarResultado(resultados) {
-  // Se os 3 símbolos forem iguais, ganhou
-  if (resultados[0] === resultados[1] && resultados[1] === resultados[2]) {
+function verificarResultado(resultado) {
+  if (resultado[0] === resultado[1] && resultado[1] === resultado[2]) {
     saldo += premio;
     atualizarSaldo();
-    resultadoEl.textContent = `🎉 Parabéns! Você ganhou R$${premio.toFixed(2)}!`;
+    resultadoEl.textContent = `🎉 Você ganhou R$${premio.toFixed(2)}!`;
   } else {
-    resultadoEl.textContent = 'Tente novamente!';
+    resultadoEl.textContent = '🙁 Não foi dessa vez!';
   }
 }
 
 btnSalvarConfig.addEventListener('click', salvarConfiguracoes);
 btnGirar.addEventListener('click', girar);
-
-// Inicializa a interface
 atualizarSaldo();
