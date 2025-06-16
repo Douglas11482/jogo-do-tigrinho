@@ -1,97 +1,114 @@
-body {
-  font-family: Arial, sans-serif;
-  text-align: center;
+/* Reset básico */
+* {
   margin: 0;
   padding: 0;
-  background-color: #001f3f;
-  color: #fff;
-  position: relative;
-  overflow-x: hidden;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.fundo {
-  background-image: url("img/tigrinho-fundo.gif");
-  background-size: cover;
-  background-position: center;
-  opacity: 0.2;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: -1;
+body {
+  background: #004e92; /* azul escuro */
+  background-image: url('images/tigrinho-animado.gif'); /* sua imagem animada do tigrinho */
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: 300px auto;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+#container-jogo {
+  background: rgba(0,0,0,0.5);
+  padding: 20px 30px;
+  border-radius: 10px;
+  width: 320px;
+  text-align: center;
+  box-shadow: 0 0 15px #f0a500;
+  position: relative;
 }
 
 h1 {
-  margin-top: 20px;
-  font-size: 2rem;
+  margin-bottom: 20px;
 }
 
-#painel-config {
-  background-color: rgba(0,0,0,0.6);
-  padding: 20px;
-  border-radius: 10px;
-  margin: 20px auto;
-  width: fit-content;
+#roleta-container {
+  margin-bottom: 15px;
 }
 
-#slot-container {
-  margin: 20px auto;
-  width: fit-content;
-}
-
-.grid {
+.roleta-grid {
   display: grid;
-  grid-template-columns: repeat(3, 80px);
-  grid-template-rows: repeat(3, 80px);
-  gap: 5px;
+  grid-template-columns: repeat(3, 60px);
+  grid-template-rows: repeat(3, 60px);
+  gap: 8px;
+  justify-content: center;
 }
 
-.grid div {
-  font-size: 2rem;
-  background-color: #fff;
-  color: #000;
+.slot-cell {
+  background: #222;
+  border: 2px solid #444;
   border-radius: 8px;
+  font-size: 36px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  box-shadow: 0 0 8px #ff0;
+  justify-content: center;
+  color: #f0a500;
+  transition: box-shadow 0.3s ease;
+  user-select: none;
+}
+
+.slot-cell.winning {
+  box-shadow: 0 0 10px 4px #f0a500;
+  border-color: #f0a500;
 }
 
 #resultado {
-  margin: 15px;
-  font-size: 1.2rem;
+  margin-bottom: 15px;
+  min-height: 24px;
+  font-weight: bold;
+  font-size: 18px;
+  color: #f0a500;
 }
 
 #saldo {
-  font-weight: bold;
-  margin: 10px;
+  margin-bottom: 15px;
+  font-size: 20px;
 }
 
-button {
-  padding: 10px 20px;
-  font-size: 1rem;
-  background-color: #0074D9;
-  color: #fff;
+#controles button {
+  background: #f0a500;
   border: none;
+  padding: 10px 18px;
+  margin: 0 8px;
+  font-weight: 700;
+  color: #000;
   border-radius: 8px;
   cursor: pointer;
-  margin-top: 10px;
+  transition: background-color 0.3s ease;
+  user-select: none;
 }
 
-button:hover {
-  background-color: #005fa3;
-}
-
-.mensagem-sem-fins {
-  margin-top: 15px;
-  font-size: 0.9rem;
-  color: #ffcc00;
+#controles button:hover {
+  background: #ffca28;
 }
 
 #qrcode-container {
-  margin-top: 30px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 
-#qrcode-container img {
-  width: 120px;
-  height: 120px;
+#qrcode canvas {
+  width: 120px !important;
+  height: 120px !important;
+}
+
+#msg-sem-fins {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #ccc;
+  font-style: italic;
+  text-align: right;
+  user-select: none;
 }
