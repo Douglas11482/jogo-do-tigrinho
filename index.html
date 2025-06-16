@@ -5,44 +5,73 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Jogo do Tigrinho - Slot Machine</title>
   <style>
+    /* Fundo azul */
     body {
       margin: 0;
-      background: linear-gradient(135deg, #f7b733, #fc4a1a);
+      background: #004d99; /* azul escuro */
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #222;
+      color: #fff;
       display: flex;
       justify-content: center;
       padding: 20px;
       height: 100vh;
       box-sizing: border-box;
+      overflow: hidden;
+      position: relative;
     }
+
+    /* Animação do tigrinho no fundo */
+    #tigrinho-fundo {
+      position: fixed;
+      bottom: 0;
+      left: -200px;
+      width: 180px;
+      height: 180px;
+      background: url('images/tigrinho.gif') no-repeat;
+      background-size: contain;
+      animation: andar 15s linear infinite;
+      opacity: 0.15;
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+    }
+    @keyframes andar {
+      0% { left: -200px; }
+      100% { left: 100vw; }
+    }
+
+    /* Container geral */
     .container {
-      background: #fff;
+      background: #003366; /* tom mais escuro do azul */
       border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.7);
       display: flex;
       max-width: 850px;
       width: 100%;
       padding: 25px;
       gap: 40px;
       align-items: center;
+      position: relative;
+      z-index: 1;
     }
+
     /* Área do jogo */
     #game-area {
       flex: 1 1 0;
     }
     h1 {
       margin-top: 0;
-      color: #fc4a1a;
-      text-shadow: 0 0 5px #f7b733;
+      color: #ffcc00;
+      text-shadow: 0 0 5px #ffcc00;
       font-size: 2.5rem;
     }
     #painel-config {
-      background: #ffe4c4;
+      background: #0059b3;
       padding: 20px;
       border-radius: 12px;
       margin-bottom: 25px;
-      box-shadow: inset 0 0 10px #fcdabb;
+      box-shadow: inset 0 0 10px #0066cc;
+      color: #ffe066;
     }
     #painel-config label {
       display: block;
@@ -55,100 +84,110 @@
       font-size: 1rem;
       padding: 5px 8px;
       border-radius: 6px;
-      border: 1px solid #fc4a1a;
+      border: 1px solid #ffcc00;
       text-align: center;
-      outline-color: #f7b733;
+      outline-color: #ffcc00;
+      color: #003366;
+      font-weight: 700;
     }
-    #btnSalvarConfig {
-      background-color: #fc4a1a;
+    #btnSalvarConfig, #btnVelocidade {
+      background-color: #ffcc00;
       border: none;
       padding: 12px 22px;
       font-size: 1.1rem;
       border-radius: 10px;
-      color: white;
+      color: #003366;
       cursor: pointer;
       font-weight: 700;
       transition: background-color 0.3s ease;
+      margin-top: 10px;
+      user-select: none;
     }
-    #btnSalvarConfig:hover {
-      background-color: #e03e0e;
+    #btnSalvarConfig:hover, #btnVelocidade:hover {
+      background-color: #e6b800;
     }
     #rolo {
       font-size: 4rem;
       letter-spacing: 0.3em;
-      background: #fff3e0;
+      background: #003366;
       border-radius: 15px;
       padding: 30px 0;
       text-align: center;
       margin-bottom: 20px;
-      box-shadow: 0 0 20px #f7b733 inset;
+      box-shadow: 0 0 20px #ffcc00 inset;
       user-select: none;
       transition: box-shadow 0.4s ease;
+      color: #ffcc00;
+      font-weight: 900;
     }
     #rolo.win {
       animation: glow 1.5s ease-in-out 2;
-      box-shadow: 0 0 40px 10px #f7b733;
+      box-shadow: 0 0 40px 10px #ffcc00;
     }
     @keyframes glow {
-      0%, 100% { box-shadow: 0 0 20px 8px #f7b733; }
-      50% { box-shadow: 0 0 40px 20px #f7b733; }
+      0%, 100% { box-shadow: 0 0 20px 8px #ffcc00; }
+      50% { box-shadow: 0 0 40px 20px #ffcc00; }
     }
     #resultado {
       font-weight: 700;
       font-size: 1.5rem;
       height: 1.8em;
-      color: #388e3c;
+      color: #ffff66;
       margin-bottom: 15px;
       min-height: 28px;
+      text-shadow: 0 0 5px #ffaa00;
     }
     #saldo {
       font-size: 1.3rem;
       margin-bottom: 25px;
       font-weight: 600;
+      color: #ffee88;
+      text-shadow: 0 0 6px #ffaa00;
     }
     #btnGirar {
-      background-color: #f7b733;
+      background-color: #ffcc00;
       border: none;
       padding: 15px 40px;
       font-size: 1.3rem;
       border-radius: 12px;
       cursor: pointer;
       font-weight: 700;
-      color: #222;
+      color: #003366;
       box-shadow: 0 4px 10px #d3a11c;
       transition: background-color 0.3s ease;
       user-select: none;
     }
     #btnGirar:hover {
-      background-color: #fbc02d;
+      background-color: #e6b800;
     }
 
     /* Área do Pix + QR Code */
     #pix-area {
       width: 220px;
-      background: #fff7e6;
+      background: #001f4d;
       border-radius: 15px;
-      box-shadow: 0 0 15px rgba(252, 74, 26, 0.3);
+      box-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
       padding: 25px 15px;
       text-align: center;
       user-select: none;
+      color: #ffee88;
+      font-weight: 700;
     }
     #pix-area p {
-      font-weight: 700;
       margin-bottom: 8px;
-      color: #fc4a1a;
+      color: #ffcc00;
       font-size: 1.2rem;
     }
     #pixKey {
       font-family: monospace;
-      background: #fff3e0;
+      background: #003366;
       border-radius: 8px;
       padding: 10px 12px;
       font-size: 1rem;
-      color: #d35400;
+      color: #ffcc00;
       word-break: break-word;
       margin-bottom: 15px;
-      border: 1px solid #f7b733;
+      border: 1px solid #ffcc00;
     }
     #qrcode {
       margin: 0 auto;
@@ -160,11 +199,13 @@
       margin-top: 20px;
       font-style: italic;
       font-size: 0.85rem;
-      color: #666;
+      color: #ccc;
     }
   </style>
 </head>
 <body>
+
+  <div id="tigrinho-fundo"></div>
 
   <div class="container">
     <div id="game-area">
@@ -173,8 +214,8 @@
       <div id="painel-config">
         <label>Saldo inicial: R$ <input type="number" id="saldoInicial" value="50" min="0" /></label>
         <label>Custo por giro: R$ <input type="number" id="custoGiro" value="2" min="0" /></label>
-        <label>Prêmio por vitória: R$ <input type="number" id="premio" value="15" min="0" /></label>
         <button id="btnSalvarConfig">Salvar Configurações</button>
+        <button id="btnVelocidade">Velocidade: Normal</button>
       </div>
 
       <div id="rolo">🐯 🍒 💎</div>
@@ -198,18 +239,4 @@
   <!-- QRCode.js -->
   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
-  <script src="script.js"></script>
-  <script>
-    // Gera QR code menor ao lado direito
-    const pixKey = document.getElementById("pixKey").textContent.trim();
-    new QRCode(document.getElementById("qrcode"), {
-      text: pixKey,
-      width: 140,
-      height: 140,
-      colorDark: "#fc4a1a",
-      colorLight: "#fff7e6",
-      correctLevel: QRCode.CorrectLevel.H
-    });
-  </script>
-</body>
-</html>
+  <script src="script.js"></script
