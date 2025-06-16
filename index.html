@@ -6,41 +6,26 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="fundo"></div>
-
   <h1>🎰 Jogo do Tigrinho</h1>
 
-  <div id="painel-config">
-    <h2>Configurações do Jogo</h2>
-    <label>Saldo inicial: R$ <input type="number" id="saldoInicial" value="50" min="0" /></label><br/>
-    <label>Valor da aposta: R$ <input type="number" id="valorAposta" value="2" min="1" /></label><br/>
-    <label>Velocidade do giro: 
-      <select id="velocidade">
-        <option value="1000">Normal</option>
-        <option value="500">Rápido</option>
-        <option value="200">Muito Rápido</option>
-      </select>
-    </label><br/>
-    <button id="btnSalvarConfig">Salvar Configurações</button>
+  <div id="game-container">
+    <div id="slot-grid">
+      <!-- 9 posições do slot -->
+      <div class="slot-cell">🐯</div>
+      <div class="slot-cell">🍒</div>
+      <div class="slot-cell">💎</div>
+      <div class="slot-cell">🐯</div>
+      <div class="slot-cell">🍒</div>
+      <div class="slot-cell">💎</div>
+      <div class="slot-cell">🐯</div>
+      <div class="slot-cell">🍒</div>
+      <div class="slot-cell">💎</div>
+    </div>
+
+    <img src="qrcode.png" alt="QR Code para doação" id="qrcode" />
   </div>
 
-  <div id="slot-container">
-    <div class="grid" id="roleta"></div>
-  </div>
-
-  <div id="resultado"></div>
-  <div id="saldo">💰 Saldo: R$50.00</div>
-  <button id="btnGirar">Girar</button>
-
-  <p class="mensagem-sem-fins">🚫 Projeto sem fins lucrativos</p>
-
-  <div id="qrcode-container">
-    <h3>💖 Ajude com uma doação:</h3>
-    <img src="qrcode.png" alt="QR Code do Pix" />
-  </div>
-
-  <audio id="somGiro" src="sounds/giro.mp3"></audio>
-  <audio id="somGanhou" src="sounds/ganhou.mp3"></audio>
+  <p>Projeto sem fins lucrativos</p>
 
   <script src="script.js"></script>
 </body>
