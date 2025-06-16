@@ -1,156 +1,101 @@
 body {
+  font-family: 'Segoe UI', sans-serif;
+  background: url('img/tigrinho-fundo.gif') no-repeat center center fixed;
+  background-size: cover;
   margin: 0;
-  background: #0055aa url('images/tigrinho-fundo.png') no-repeat bottom left;
-  background-size: 160px auto;
-  font-family: sans-serif;
+  padding: 20px;
   color: #fff;
   text-align: center;
-  padding: 20px;
-  box-sizing: border-box;
 }
+
+.container {
+  background-color: rgba(0, 0, 50, 0.85);
+  padding: 20px;
+  border-radius: 15px;
+  max-width: 800px;
+  margin: auto;
+  box-shadow: 0 0 15px #000;
+}
+
 h1 {
-  margin-top: 20px;
-  color: #ffcc00;
-  text-shadow: 0 0 5px #ffcc00;
-}
-#painel-config {
-  background: #003366;
-  padding: 10px 20px;
-  border-radius: 8px;
-  margin: 15px auto;
-  max-width: 320px;
-  color: #fff;
-  text-align: left;
-}
-#painel-config label {
-  display: block;
-  margin: 8px 0;
-}
-#painel-config input {
-  width: 80px;
-  padding: 4px;
-  border: none;
-  border-radius: 4px;
-  text-align: center;
-}
-button {
-  margin-top: 10px;
-  padding: 8px 16px;
-  background: #ffcc00;
-  color: #003366;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-}
-#rolo {
-  font-size: 3.5rem;
-  background: #002244;
-  padding: 20px;
-  border-radius: 8px;
-  display: inline-block;
-  min-width: 280px;
-  color: #ffcc00;
-  box-shadow: inset 0 0 10px #ffcc00;
-  transition: box-shadow 0.3s;
-}
-#rolo.win {
-  box-shadow: 0 0 20px 8px #ff0;
-}
-@keyframes piscar {
-  0%,100% { background-color: #002244; color: #ffcc00; }
-  50% { background-color: #ffee00; color: #002244; }
-}
-#resultado {
-  height: 1.4em;
-  margin: 10px 0;
-}
-#saldo {
-  font-weight: bold;
+  font-size: 2.5em;
   margin-bottom: 10px;
+  color: #ffcc00;
 }
+
+.sem-fins-lucrativos {
+  font-size: 1em;
+  color: #ff8080;
+  margin-bottom: 15px;
+}
+
+#painel-config {
+  margin: 20px auto;
+}
+
+#painel-config input,
+#painel-config select {
+  margin: 5px;
+  padding: 5px;
+  font-size: 1em;
+}
+
+#btnSalvarConfig {
+  margin-top: 10px;
+  padding: 5px 15px;
+  font-weight: bold;
+}
+
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 10px;
+  margin: 20px auto;
+  font-size: 2.5em;
+  padding: 10px;
+  background: #000000aa;
+  border-radius: 12px;
+  width: 300px;
+  height: 300px;
+  justify-items: center;
+  align-items: center;
+  color: #fff;
+}
+
 #btnGirar {
-  font-size: 1.2rem;
-  padding: 12px 25px;
+  padding: 10px 30px;
+  font-size: 1.2em;
   background: #ffcc00;
-  color: #003366;
   border: none;
   border-radius: 8px;
   cursor: pointer;
-}
-#pix-area {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: #001a40;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px #ffcc00;
-}
-#qrcode {
-  width: 120px;
-  height: 120px;
-  margin: auto;
-}
-#aviso {
   margin-top: 10px;
-  font-size: 0.8rem;
-  color: #ccc;
 }
-@media (max-width: 600px) {
-  #pix-area {/* ...mantém todo o CSS anterior até #pix-area... */
 
-#pix-area {
-  /* removido position:absolute, top, right */
-  background: #001a40;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px #ffcc00;
-  margin: 20px auto;       /* centraliza e dá espaçamento */
-  display: inline-block;
+#btnGirar:hover {
+  background: #ffaa00;
+}
+
+#saldo {
+  font-size: 1.2em;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+#resultado {
+  font-size: 1.1em;
+  margin-top: 10px;
+  color: #00ffcc;
+}
+
+#qrcode-container {
+  margin-top: 25px;
 }
 
 #qrcode {
   width: 120px;
   height: 120px;
-  margin: auto;
+  border: 2px solid #fff;
+  border-radius: 10px;
 }
-
-#aviso {
-  margin-top: 10px;
-  font-size: 0.8rem;
-  color: #ccc;
-}
-
-/* media query mantida igual */
-@media (max-width: 600px) /* ...mantém todo o CSS anterior até #pix-area... */
-
-#pix-area {
-  /* removido position:absolute, top, right */
-  background: #001a40;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px #ffcc00;
-  margin: 20px auto;       /* centraliza e dá espaçamento */
-  display: inline-block;
-}
-
-#qrcode {
-  width: 120px;
-  height: 120px;
-  margin: auto;
-}
-
-#aviso {
-  margin-top: 10px;
-  font-size: 0.8rem;
-  color: #ccc;
-}
-
-/* media query mantida igual */
-@media (max-width: 600px) {
-  #pix-area {
-    margin: 20px auto;
-  }
-}
-
