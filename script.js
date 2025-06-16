@@ -1,106 +1,129 @@
-const simbolos = ['🐯', '🍒', '💎'];
-let saldo = 0;
-let aposta = 2;
-let velocidade = 500;
+const symbols = ['🐯', '🍒', '🍋', '💎', '🔔', '🍀', '⭐', '7️⃣', '👑'];
+const grid = document.getElementById('grid');
+const balanceEl = document.getElementById('balance');
+const betEl = document.getElementById('bet');
+const messageEl = document.getElementById('message');
+const spinBtn = document.getElementById('spin');
+const fastSpinBtn = document.getElementById('fast-spin');
+const spinSound = document.getElementById('spin-sound');
+const winSound = document.getElementById('win-sound');
 
-const roleta = document.getElementById("roleta");
-const btnGirar = document.getElementById("btnGirar");
-const btnAcelerar = document.getElementById("btnAcelerar");
-const btnAumentarAposta = document.getElementById("btnAumentarAposta");
-const btnDiminuirAposta = document.getElementById("btnDiminuirAposta");
-const saldoDisplay = document.getElementById("saldo");
-const resultado = document.getElementById("resultado");
-const valorAposta = document.getElementById("valorAposta");
+let balance = 1000;
+let spinning = false;
 
-document.getElementById("btnIniciar").onclick = () => {
-  saldo = parseFloat(document.getElementById("saldoInicial").value);
-  atualizarTela();
-  gerarQRCodePix();
-};
-
-btnAcelerar.onclick = () => {
-  velocidade = Math.max(100, velocidade - 100);
-};
-
-btnAumentarAposta.onclick = () => {
-  aposta += 1;
-  atualizarTela();
-};
-
-btnDiminuirAposta.onclick = () => {
-  aposta = Math.max(1, aposta - 1);
-  atualizarTela();
-};
-
-btnGirar.onclick = () => {
-  if (saldo < aposta) {
-    resultado.textContent = "Saldo insuficiente!";
-    return;
-  }
-
-  saldo -= aposta;
-
-  const grade = [];
+function createGrid() {
+  grid.innerHTML = '';
   for (let i = 0; i < 9; i++) {
-    grade.push(simbolos[Math.floor(Math.random() * simbolos.length)]);
+    const div = document.createElement('div');
+    div.classList.add('grid-item');
+    div.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+    grid.appendChild(div);
   }
-
-  desenharGrade(grade);
-  verificarVitoria(grade);
-  atualizarTela();
-};
-
-function desenharGrade(grade) {
-  roleta.innerHTML = '';
-  grade.forEach(simbolo => {
-    const span = document.createElement("div");
-    span.textContent = simbolo;
-    roleta.appendChild(span);
-  });
-
-  document.getElementById("somGiro").play();
 }
 
-function verificarVitoria(g) {
-  let ganho = 0;
+function getGridSymbols() {
+  return [...document.querySelectorAll('.grid-item')].map(el => el.textContent);
+}
 
-  const linhas = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 4, 8],
-    [2, 4, 6]
+function checkWin(symbols) {
+  const wins = [
+    [0, 1, 2], // Linha 1
+    [3, 4, 5], // Linha 2
+    [6, 7, 8], // Linha 3
+    [0, 4, 8], // Diagonal principal
+    [2, 4, 6]  // Diagonal secundária
   ];
 
-  for (const [a, b, c] of linhas) {
-    if (g[a] === g[b] && g[b] === g[c]) {
-      if (g[a] === '🐯') ganho += aposta * 10;
-      else if (g[a] === '💎') ganho += aposta * 5;
-      else if (g[a] === '🍒') ganho += aposta * 2;
+  for (const [a, b, c] of wins) {
+    if (symbols[a] === symbols[b] && symbols[b] === symbols[c]) {
+      return symbols[a];
     }
   }
 
-  if (ganho > 0) {
-    saldo += ganho;
-    resultado.textContent = `🎉 Você ganhou R$${ganho.toFixed(2)}!`;
-    document.getElementById("somGanhou").play();
-  } else {
-    resultado.textContent = "Tente novamente!";
+  return null;
+}
+
+function spin(speed = 200) {
+  if (spinning) return;
+  const bet = parseInt(betEl.value);
+  if (isNaN(bet) || bet <= 0) {
+    messageEl.textContent = "Aposta inválida!";
+    return;
   }
+  if (bet > balance) {
+    messageEl.textContent = "Saldo insuficiente!";
+    return;
+  }
+
+  spinning = true;
+  messageEl.textContent = '';
+  spinSound.play();
+
+  let iterations = 10;
+  let interval = setInterval(() => {
+    createGrid();
+    iterations--;
+    if (iterations <= 0) {
+      clearInterval(interval);
+      const finalSymbols = getGridSymbols();
+      const winSymbol = checkWin(finalSymbols);
+      if (winSymbol) {
+        const winnings = bet * 5;
+        balance += winnings;
+        messageEl.textContent = `Você ganhou R$ ${winnings}!`;
+        winSound.play();
+      } else {
+        balance -= bet;
+        messageEl.textContent = 'Tente novamente!';
+      }
+      balanceEl.textContent = balance;
+      spinning = false;
+    }
+  }, speed);
 }
 
-function atualizarTela() {
-  saldoDisplay.textContent = `💰 Saldo: R$${saldo.toFixed(2)}`;
-  valorAposta.textContent = `Aposta: R$${aposta.toFixed(2)}`;
+spinBtn.addEventListener('click', () => spin(200));
+fastSpinBtn.addEventListener('click', () => spin(80));
+
+createGrid();
+
+// Tigrinho animado no fundo (estrelas ou partículas)
+const canvas = document.getElementById("tigrinho-bg");
+const ctx = canvas.getContext("2d");
+let particles = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 }
 
-// Gera QRCode com a chave Pix fornecida
-function gerarQRCodePix() {
-  const chavePix = "f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1";
-  const valor = ""; // Pode ser vazio para doação
-  const nome = "Jogo Tigrinho";
-  const cidade = "BRASIL";
-  const payload = `00020126360014BR.GOV.BCB.PIX0114${chavePix}5204000053039865802BR5913${nome}6006${cidade}62070503***6304`;
-  
-  QRCode.toCanvas(document.getElementById("qrcode"), payload, { width: 180 });
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
+function createParticles() {
+  particles = Array.from({ length: 50 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2 + 1,
+    d: Math.random() * 0.5 + 0.2,
+  }));
 }
+
+function drawParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+  for (let p of particles) {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2, true);
+    ctx.fill();
+    p.y += p.d;
+    if (p.y > canvas.height) {
+      p.y = 0;
+      p.x = Math.random() * canvas.width;
+    }
+  }
+  requestAnimationFrame(drawParticles);
+}
+
+createParticles();
+drawParticles();
