@@ -42,20 +42,14 @@ function atualizarPainel() {
 }
 
 function atualizarBotoesEstado() {
-  // Desabilita aumentar aposta se for maior que saldo
   betPlusBtn.disabled = bet + 10 > balance;
-  // Desabilita diminuir aposta se menor que 10
   betMinusBtn.disabled = bet - 10 < 10;
-  // Desabilita girar se saldo insuficiente
   spinBtn.disabled = spinning || bet > balance;
-  // Desabilita adicionar saldo se spinning
   addBalanceBtn.disabled = spinning;
-  // Acelerar só desabilita se spinning
   speedUpBtn.disabled = spinning;
 }
 
 function atualizarQRCode() {
-  // Atualiza o QR Code Pix com sua chave usando o site api.qrserver.com
   qrCodeImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=pix:${pixKey}`;
 }
 
@@ -90,15 +84,8 @@ function girar() {
 function verificarResultado() {
   const values = currentSlots.map(cell => cell.textContent);
 
-  const linhas = [
-    [0,1,2],
-    [3,4,5],
-    [6,7,8],
-  ];
-  const diagonais = [
-    [0,4,8],
-    [2,4,6],
-  ];
+  const linhas = [[0,1,2],[3,4,5],[6,7,8]];
+  const diagonais = [[0,4,8],[2,4,6]];
 
   let ganhou = false;
   for (const linha of linhas) {
