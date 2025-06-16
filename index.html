@@ -4,150 +4,185 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Jogo do Tigrinho - Slot Machine</title>
-  <link rel="stylesheet" href="style.css" />
   <style>
     body {
-      font-family: Arial, sans-serif;
-      max-width: 480px;
-      margin: 20px auto;
-      padding: 0 10px;
-      text-align: center;
-      background: #f9f9f9;
+      margin: 0;
+      background: linear-gradient(135deg, #f7b733, #fc4a1a);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #222;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      height: 100vh;
+      box-sizing: border-box;
+    }
+    .container {
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+      display: flex;
+      max-width: 850px;
+      width: 100%;
+      padding: 25px;
+      gap: 40px;
+      align-items: center;
+    }
+    /* Área do jogo */
+    #game-area {
+      flex: 1 1 0;
     }
     h1 {
-      margin-bottom: 0.3em;
-      color: #e67e22;
-      text-shadow: 1px 1px 3px #b85c00;
+      margin-top: 0;
+      color: #fc4a1a;
+      text-shadow: 0 0 5px #f7b733;
+      font-size: 2.5rem;
     }
     #painel-config {
-      background: #fff8e1;
-      border: 1px solid #f0c36d;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 6px;
-      text-align: left;
-      font-size: 14px;
+      background: #ffe4c4;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: inset 0 0 10px #fcdabb;
     }
     #painel-config label {
       display: block;
-      margin-bottom: 6px;
+      margin-bottom: 10px;
+      font-weight: 600;
+      font-size: 1rem;
     }
-    #rolo {
-      font-size: 3.5em;
-      letter-spacing: 0.25em;
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px 10px;
-      margin-bottom: 12px;
-      box-shadow: 0 0 10px #e67e22aa inset;
-      user-select: none;
+    #painel-config input {
+      width: 80px;
+      font-size: 1rem;
+      padding: 5px 8px;
+      border-radius: 6px;
+      border: 1px solid #fc4a1a;
+      text-align: center;
+      outline-color: #f7b733;
     }
-    #resultado {
-      font-weight: bold;
-      font-size: 1.3em;
-      height: 1.5em;
-      margin-bottom: 8px;
-      color: #27ae60;
-      min-height: 24px;
-    }
-    #saldo {
-      font-size: 1.1em;
-      margin-bottom: 15px;
-    }
-    button {
-      background-color: #e67e22;
+    #btnSalvarConfig {
+      background-color: #fc4a1a;
       border: none;
-      padding: 12px 25px;
-      font-size: 1.1em;
-      border-radius: 8px;
+      padding: 12px 22px;
+      font-size: 1.1rem;
+      border-radius: 10px;
       color: white;
       cursor: pointer;
+      font-weight: 700;
+      transition: background-color 0.3s ease;
+    }
+    #btnSalvarConfig:hover {
+      background-color: #e03e0e;
+    }
+    #rolo {
+      font-size: 4rem;
+      letter-spacing: 0.3em;
+      background: #fff3e0;
+      border-radius: 15px;
+      padding: 30px 0;
+      text-align: center;
+      margin-bottom: 20px;
+      box-shadow: 0 0 20px #f7b733 inset;
+      user-select: none;
+      transition: box-shadow 0.4s ease;
+    }
+    #rolo.win {
+      animation: glow 1.5s ease-in-out 2;
+      box-shadow: 0 0 40px 10px #f7b733;
+    }
+    @keyframes glow {
+      0%, 100% { box-shadow: 0 0 20px 8px #f7b733; }
+      50% { box-shadow: 0 0 40px 20px #f7b733; }
+    }
+    #resultado {
+      font-weight: 700;
+      font-size: 1.5rem;
+      height: 1.8em;
+      color: #388e3c;
+      margin-bottom: 15px;
+      min-height: 28px;
+    }
+    #saldo {
+      font-size: 1.3rem;
+      margin-bottom: 25px;
+      font-weight: 600;
+    }
+    #btnGirar {
+      background-color: #f7b733;
+      border: none;
+      padding: 15px 40px;
+      font-size: 1.3rem;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #222;
+      box-shadow: 0 4px 10px #d3a11c;
       transition: background-color 0.3s ease;
       user-select: none;
     }
-    button:hover {
-      background-color: #d96900;
+    #btnGirar:hover {
+      background-color: #fbc02d;
     }
-    #doacao {
-      margin-top: 25px;
-      background: #fff8e1;
-      border: 1px solid #f0c36d;
-      padding: 15px;
-      border-radius: 6px;
+
+    /* Área do Pix + QR Code */
+    #pix-area {
+      width: 220px;
+      background: #fff7e6;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(252, 74, 26, 0.3);
+      padding: 25px 15px;
+      text-align: center;
+      user-select: none;
     }
-    #doacao p {
-      margin: 5px 0;
+    #pix-area p {
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #fc4a1a;
+      font-size: 1.2rem;
     }
-    #doacao code {
-      display: block;
-      background: #f0f0f0;
-      padding: 8px 12px;
-      font-size: 1.1em;
+    #pixKey {
+      font-family: monospace;
+      background: #fff3e0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 1rem;
+      color: #d35400;
       word-break: break-word;
-      border-radius: 4px;
-      margin-bottom: 12px;
-    }
-    #aviso {
-      margin-top: 15px;
-      font-style: italic;
-      color: #666;
-      font-size: 0.9em;
+      margin-bottom: 15px;
+      border: 1px solid #f7b733;
     }
     #qrcode {
       margin: 0 auto;
-      width: 200px;
-      height: 200px;
+      width: 140px;
+      height: 140px;
+      user-select: none;
+    }
+    #aviso {
+      margin-top: 20px;
+      font-style: italic;
+      font-size: 0.85rem;
+      color: #666;
     }
   </style>
 </head>
 <body>
 
-  <h1>🎰 Jogo do Tigrinho</h1>
+  <div class="container">
+    <div id="game-area">
+      <h1>🎰 Jogo do Tigrinho</h1>
 
-  <div id="painel-config">
-    <h2>⚙️ Configurações</h2>
-    <label>Saldo inicial: R$ <input type="number" id="saldoInicial" value="50" min="0" /></label>
-    <label>Custo por giro: R$ <input type="number" id="custoGiro" value="2" min="0" /></label>
-    <label>Prêmio por vitória: R$ <input type="number" id="premio" value="15" min="0" /></label>
-    <button id="btnSalvarConfig">Salvar Configurações</button>
-  </div>
+      <div id="painel-config">
+        <label>Saldo inicial: R$ <input type="number" id="saldoInicial" value="50" min="0" /></label>
+        <label>Custo por giro: R$ <input type="number" id="custoGiro" value="2" min="0" /></label>
+        <label>Prêmio por vitória: R$ <input type="number" id="premio" value="15" min="0" /></label>
+        <button id="btnSalvarConfig">Salvar Configurações</button>
+      </div>
 
-  <div id="slot-container">
-    <div id="rolo">🐯 🍒 💎</div>
-    <div id="resultado"></div>
-    <div id="saldo">💰 Saldo: R$50.00</div>
-    <button id="btnGirar">🎲 Girar</button>
-  </div>
+      <div id="rolo">🐯 🍒 💎</div>
+      <div id="resultado"></div>
+      <div id="saldo">💰 Saldo: R$50.00</div>
+      <button id="btnGirar">🎲 Girar</button>
+    </div>
 
-  <div id="doacao">
-    <p>❤️ Apoie este projeto (sem fins lucrativos)</p>
-    <p>Chave Pix para doação:</p>
-    <code id="pixKey">f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1</code>
-    <div id="qrcode"></div>
-  </div>
-
-  <p id="aviso">🔒 Este projeto é apenas para fins educacionais e sem fins lucrativos.</p>
-
-  <audio id="somGiro" src="sounds/giro.mp3" preload="auto"></audio>
-  <audio id="somGanhou" src="sounds/ganhou.mp3" preload="auto"></audio>
-
-  <!-- Biblioteca QR Code -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-  
-  <script src="script.js"></script>
-  <script>
-    // Gera o QR code para a chave Pix
-    const pixKey = document.getElementById("pixKey").textContent.trim();
-
-    // Aqui geramos um QR básico com a chave Pix (pode ser o payload Pix oficial se quiser depois)
-    new QRCode(document.getElementById("qrcode"), {
-      text: pixKey,
-      width: 200,
-      height: 200,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.H
-    });
-  </script>
-</body>
-</html>
+    <div id="pix-area">
+      <p>❤️ Apoie este projeto</p>
+      <
