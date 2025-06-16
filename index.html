@@ -5,49 +5,53 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Jogo do Tigrinho - Slot Machine</title>
 <link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 </head>
 <body>
 
-<div id="container-jogo">
+<div id="container">
 
-  <h1>🎰 Jogo do Tigrinho</h1>
+  <header>
+    <h1>🎰 Jogo do Tigrinho</h1>
+    <div id="mensagem-sem-fins">⚠️ Sem fins lucrativos</div>
+  </header>
 
-  <div id="roleta-container">
-    <div id="roleta" class="roleta-grid">
-      <!-- 9 posições 3x3 -->
-      <div class="slot-cell" data-symbol=""></div>
-      <div class="slot-cell" data-symbol=""></div>
-      <div class="slot-cell" data-symbol=""></div>
-      <div class="slot-cell" data-symbol=""></div>
-      <div class="slot-cell" data-symbol=""></div>
-      <div class="slot-cell" data-symbol=""></div>
-      <div class="slot-cell" data-symbol=""></div>
-      <div class="slot-cell" data-symbol=""></div>
-      <div class="slot-cell" data-symbol=""></div>
-    </div>
-  </div>
+  <main>
+    <section id="jogo-area">
+      <div id="roleta" class="roleta-3x3">
+        <div class="slot-cell"></div>
+        <div class="slot-cell"></div>
+        <div class="slot-cell"></div>
+        <div class="slot-cell"></div>
+        <div class="slot-cell"></div>
+        <div class="slot-cell"></div>
+        <div class="slot-cell"></div>
+        <div class="slot-cell"></div>
+        <div class="slot-cell"></div>
+      </div>
+      <div id="resultado"></div>
+      <div id="saldo">💰 Saldo: R$ 50.00</div>
+      <div class="botoes-controle">
+        <button id="btnGirar">Girar</button>
+        <button id="btnAcelerar">Acelerar Giro</button>
+      </div>
+    </section>
 
-  <div id="resultado"></div>
-  <div id="saldo">💰 Saldo: R$ 50.00</div>
-
-  <div id="controles">
-    <button id="btnGirar">Girar</button>
-    <button id="btnAcelerar">Acelerar Giro</button>
-  </div>
-
-  <div id="qrcode-container">
-    <canvas id="qrcode"></canvas>
-  </div>
-
-  <div id="msg-sem-fins">⚠️ Sem fins lucrativos</div>
-
+    <section id="qrcode-area">
+      <canvas id="qrcode"></canvas>
+      <button id="btnDoar">Doe para ajudar</button>
+    </section>
+  </main>
+  
+  <footer>
+    <small>© Jogo do Tigrinho - Sem fins lucrativos</small>
+  </footer>
+  
 </div>
 
-<!-- Sons -->
 <audio id="somGiro" src="sounds/giro.mp3"></audio>
 <audio id="somGanhou" src="sounds/ganhou.mp3"></audio>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <script src="script.js"></script>
 
 </body>
