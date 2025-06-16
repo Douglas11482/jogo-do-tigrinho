@@ -1,65 +1,54 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Jogo do Tigrinho</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <title>Jogo do Tigrinho - Diversão</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Jogo do Tigrinho</h1>
-
-  <div class="top-bar">
-    <button id="cycleAddAmount">Valor a adicionar: R$ <span id="addAmountDisplay">10</span></button>
-    <button id="addBalance">Adicionar saldo</button>
-    <div id="balance">Saldo: R$ 100</div>
-  </div>
-
-  <div class="slot-machine">
-    <div class="reel" id="reel1"></div>
-    <div class="reel" id="reel2"></div>
-    <div class="reel" id="reel3"></div>
-  </div>
-
-  <div class="controls">
-    <button id="speedBtn" title="Alterar velocidade">⏩</button>
-    <button id="muteBtn" title="Ativar/desativar som">🔊</button>
-    <button id="spinBtn">GIRAR</button>
-    <div class="bet-control">
-      <button id="decreaseBet">-</button>
-      <span id="betValue">R$ 1</span>
-      <button id="increaseBet">+</button>
+    <div class="top-bar">
+        <button id="changeAddAmount">💰 Valor: R$ <span id="addAmountDisplay">10</span></button>
+        <button id="addBalance">Adicionar Saldo</button>
+        <div id="balance">Saldo: R$ 0</div>
     </div>
-  </div>
 
-  <p id="message">Este jogo é apenas para diversão, você não ganhará dinheiro real.</p>
-
-  <div class="pix-area">
-    <img
-      id="pixQR"
-      src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1"
-      alt="QR Code Pix"
-    />
-    <p>
-      Chave Pix:
-      <span id="pixKey">f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1</span>
-      <button id="copyPixBtn">Copiar</button>
-    </p>
-  </div>
-
-  <div id="fireworks" class="hidden">
-    <div class="firework-left"></div>
-    <div class="firework-right"></div>
-    <div class="win-text">
-      <h2 id="winMainText"></h2>
-      <p id="winSubText"></p>
+    <div id="slot">
+        <div class="reel" id="reel1"></div>
+        <div class="reel" id="reel2"></div>
+        <div class="reel" id="reel3"></div>
     </div>
-  </div>
 
-  <audio id="spinSound" src="https://cdn.pixabay.com/download/audio/2022/03/21/audio_8e274fa0d5.mp3?filename=slot-machine-spin-49235.mp3" preload="auto"></audio>
-  <audio id="winSound" src="https://cdn.pixabay.com/download/audio/2022/03/21/audio_d3ce9ea44f.mp3?filename=game-win-1-6299.mp3" preload="auto"></audio>
-  <audio id="bigWinSound" src="https://cdn.pixabay.com/download/audio/2022/03/21/audio_0a063a183f.mp3?filename=game-win-epic-7266.mp3" preload="auto"></audio>
+    <div class="controls">
+        <button id="soundToggle">🔊</button>
+        <button id="speed" class="small">⚡</button>
+        <button id="spin">GIRAR</button>
+        <button id="increaseBet">+</button>
+        <button id="decreaseBet">−</button>
+    </div>
 
-  <script src="script.js"></script>
+    <div class="bet-display">Aposta: R$ <span id="betAmount">1</span></div>
+
+    <div class="message">🎮 Este jogo é apenas para diversão. Não envolve dinheiro real.</div>
+
+    <div id="qrcode-container">
+        <canvas id="qrcode"></canvas>
+        <div class="pix-info">
+            💖 Se quiser contribuir com o projeto, doe via Pix abaixo:
+            <div id="pix-key">f8430bc9-d9b8-4318-a3cf-bb016dc5b2d1</div>
+            <button id="copyPix">Copiar Pix</button>
+        </div>
+    </div>
+
+    <div id="fireworks" class="hidden"></div>
+    <div id="big-win" class="hidden">
+        <h1>GRANDE GANHO</h1>
+        <p>Parabéns!!</p>
+    </div>
+
+    <audio id="spinSound" src="spin.mp3"></audio>
+    <audio id="winSound" src="win.mp3"></audio>
+
+    <script src="qrcode.min.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
