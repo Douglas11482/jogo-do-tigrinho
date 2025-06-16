@@ -1,84 +1,85 @@
-const simbolos = ['🐯', '🍒', '💎', '🍀', '7️⃣'];
+// Elementos DOM
 const rolo = document.getElementById('rolo');
-const resultadoEl = document.getElementById('resultado');
-const saldoEl = document.getElementById('saldo');
+const resultado = document.getElementById('resultado');
+const saldoDisplay = document.getElementById('saldo');
 const btnGirar = document.getElementById('btnGirar');
 const btnSalvarConfig = document.getElementById('btnSalvarConfig');
+
+const saldoInput = document.getElementById('saldoInicial');
+const custoInput = document.getElementById('custoGiro');
+const premioInput = document.getElementById('premio');
+
 const somGiro = document.getElementById('somGiro');
 const somGanhou = document.getElementById('somGanhou');
 
-let saldo = 50;
-let custoGiro = 2;
-let premio = 15;
-let girando = false;
-let giroInterval;
+let saldo = Number(saldoInput.value);
+let custoGiro = Number(custoInput.value);
+let premio = Number(premioInput.value);
 
-function atualizarSaldo() {
-  saldoEl.textContent = `💰 Saldo: R$${saldo.toFixed(2)}`;
+const simbolos = ['🐯', '🍒', '💎', '🍋', '🔔'];
+
+function atualizarSaldoDisplay() {
+  saldoDisplay.textContent = `💰 Saldo: R$${saldo.toFixed(2)}`;
 }
 
 function salvarConfiguracoes() {
-  const saldoInicial = Number(document.getElementById('saldoInicial').value);
-  const custo = Number(document.getElementById('custoGiro').value);
-  const premioValor = Number(document.getElementById('premio').value);
-
-  if (saldoInicial < 0 || custo < 0 || premioValor < 0) {
-    alert('Valores não podem ser negativos!');
-    return;
-  }
-
-  saldo = saldoInicial;
-  custoGiro = custo;
-  premio = premioValor;
-
-  atualizarSaldo();
-  resultadoEl.textContent = '⚙️ Configurações salvas!';
+  saldo = Number(saldoInput.value);
+  custoGiro = Number(custoInput.value);
+  premio = Number(premioInput.value);
+  atualizarSaldoDisplay();
+  resultado.textContent = '';
 }
 
+btnSalvarConfig.addEventListener('click', salvarConfiguracoes);
+
 function girar() {
-  if (girando) return;
   if (saldo < custoGiro) {
-    resultadoEl.textContent = '❌ Saldo insuficiente!';
+    resultado.textContent = 'Saldo insuficiente para girar!';
     return;
   }
 
   saldo -= custoGiro;
-  atualizarSaldo();
-  resultadoEl.textContent = '🎲 Girando...';
-  girando = true;
+  atualizarSaldoDisplay();
+  resultado.textContent = 'Girando...';
+  btnGirar.disabled = true;
 
   somGiro.currentTime = 0;
   somGiro.play();
 
-  let contador = 0;
-  giroInterval = setInterval(() => {
-    let resultado = '';
-    for (let i = 0; i < 3; i++) {
-      resultado += simbolos[Math.floor(Math.random() * simbolos.length)] + ' ';
-    }
-    rolo.textContent = resultado.trim();
-    contador++;
+  // Simular giro com animação simples
+  let giros = 15;
+  let cont = 0;
 
-    if (contador > 15) {
-      clearInterval(giroInterval);
-      verificarResultado(rolo.textContent.split(' '));
-      girando = false;
+  const intervalo = setInterval(() => {
+    const randomSimbolos = [];
+    for (let i = 0; i < 3; i++) {
+      const s = simbolos[Math.floor(Math.random() * simbolos.length)];
+      randomSimbolos.push(s);
+    }
+    rolo.textContent = randomSimbolos.join(' ');
+
+    cont++;
+    if (cont >= giros) {
+      clearInterval(intervalo);
+
+      // Verifica vitória: 3 símbolos iguais
+      if (randomSimbolos[0] === randomSimbolos[1] && randomSimbolos[1] === randomSimbolos[2]) {
+        saldo += premio;
+        atualizarSaldoDisplay();
+        resultado.textContent = `🎉 Você ganhou R$${premio.toFixed(2)}!`;
+        rolo.classList.add('win');
+        somGanhou.currentTime = 0;
+        somGanhou.play();
+        setTimeout(() => rolo.classList.remove('win'), 2000);
+      } else {
+        resultado.textContent = 'Tente novamente!';
+      }
+      btnGirar.disabled = false;
     }
   }, 100);
 }
 
-function verificarResultado(resultado) {
-  if (resultado[0] === resultado[1] && resultado[1] === resultado[2]) {
-    saldo += premio;
-    atualizarSaldo();
-    resultadoEl.textContent = `🎉 Você ganhou R$${premio.toFixed(2)}!`;
-    somGanhou.currentTime = 0;
-    somGanhou.play();
-  } else {
-    resultadoEl.textContent = '🙁 Não foi dessa vez!';
-  }
-}
-
-btnSalvarConfig.addEventListener('click', salvarConfiguracoes);
 btnGirar.addEventListener('click', girar);
-atualizarSaldo();
+
+// Inicializa saldo
+atualizarSaldoDisplay();
