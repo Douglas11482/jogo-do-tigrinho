@@ -1,124 +1,56 @@
 body {
-  background: #0d4f8b url('images/tigrinho.gif') no-repeat center bottom;
-  background-size: 150px 150px;
   font-family: Arial, sans-serif;
+  background: url('images/tigrinho.gif') no-repeat center center fixed;
+  background-size: cover;
   color: white;
   text-align: center;
   margin: 0;
+  padding: 0;
+}
+
+.container {
+  background-color: rgba(0, 0, 50, 0.85);
+  margin: auto;
   padding: 20px;
+  max-width: 500px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px #000;
 }
 
-h1 {
-  margin-bottom: 15px;
+#jogo {
+  margin: 20px 0;
 }
 
-#painel-config {
-  margin-bottom: 20px;
-}
-
-#jogo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 30px;
-  margin-bottom: 20px;
-}
-
-.slot {
+.roleta {
   display: grid;
   grid-template-columns: repeat(3, 60px);
   grid-template-rows: repeat(3, 60px);
-  gap: 5px;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 10px;
-  border-radius: 10px;
-  user-select: none;
-}
-
-.slot-cell {
-  background: #0a75d6;
-  border-radius: 8px;
-  font-size: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: box-shadow 0.3s ease;
-}
-
-.slot-cell.winning {
-  box-shadow: 0 0 15px 5px gold;
-}
-
-#qrcode {
-  background: white;
-  border-radius: 8px;
-  padding: 10px;
-  width: 150px;
-  height: 150px;
-}
-
-#resultado {
-  margin-bottom: 10px;
-  font-size: 18px;
-  height: 24px;
-}
-
-#saldo {
-  font-size: 20px;
-  margin-bottom: 20px;
-}
-
-#botoes-controle {
-  display: flex;
-  justify-content: center;
   gap: 10px;
-  margin-bottom: 20px;
+  justify-content: center;
+  font-size: 40px;
 }
 
-button {
-  cursor: pointer;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
+#controles {
+  margin-top: 15px;
 }
 
-button.grande {
-  background-color: #1db954;
-  color: white;
-  font-size: 22px;
+.grande {
+  font-size: 20px;
   padding: 12px 30px;
-  flex-shrink: 0;
+  margin: 5px;
 }
 
-button.pequeno {
-  background-color: #0a75d6;
-  color: white;
+.pequeno {
   font-size: 14px;
-  padding: 8px 12px;
-  flex-shrink: 0;
+  padding: 8px 16px;
+  margin: 5px;
 }
 
-button.grande:hover {
-  background-color: #17a44c;
+#qr-area {
+  margin-top: 30px;
 }
 
-button.pequeno:hover {
-  background-color: #0963b0;
-}
-
-#doar-msg {
-  font-size: 16px;
-  font-style: italic;
-  color: #ddd;
-}
-
-input[type=number] {
-  width: 100px;
-  padding: 5px;
-  font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-left: 5px;
-  text-align: center;
+.mensagem-doacao {
+  font-size: 14px;
+  margin-top: 5px;
 }
