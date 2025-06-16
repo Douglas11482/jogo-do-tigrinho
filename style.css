@@ -1,126 +1,214 @@
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(to bottom, #1e90ff, #87cefa);
+  background: linear-gradient(135deg, #4a90e2, #0057b7);
   color: #fff;
-  text-align: center;
-  overflow-x: hidden;
-  position: relative;
   min-height: 100vh;
-}
-
-#tigrinho-bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0; /* fundo */
-  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
 }
 
 .container {
-  position: relative;
-  z-index: 1; /* conteúdo acima do fundo */
+  background: #0b3d91;
+  border-radius: 16px;
   padding: 20px;
+  width: 360px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
 }
 
-#slot-machine {
-  max-width: 400px;
-  margin: 0 auto;
-  background: rgba(0, 0, 50, 0.8);
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+header {
+  text-align: center;
+  margin-bottom: 15px;
 }
 
-#grid {
-  display: grid;
-  grid-template-columns: repeat(3, 100px);
-  grid-template-rows: repeat(3, 100px);
-  gap: 5px;
-  justify-content: center;
-  margin-bottom: 20px;
+h1 {
+  font-size: 2.4rem;
+  font-weight: 900;
+  margin-bottom: 5px;
 }
 
-.grid-item {
-  width: 100px;
-  height: 100px;
-  background: #fff;
+.subtitle {
+  font-size: 1rem;
+  margin-bottom: 12px;
+  color: #ffeb3b;
+  font-weight: 600;
+}
+
+.btn-add-balance {
+  margin-top: 12px;
+  background: #28a745;
+  border: none;
+  padding: 10px 18px;
   border-radius: 10px;
-  font-size: 50px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 4px #1e7e34;
+  transition: background-color 0.3s ease;
+}
+
+.btn-add-balance:hover {
+  background: #218838;
+}
+
+.btn-add-balance:active {
+  box-shadow: none;
+  transform: translateY(2px);
+}
+
+.game-area {
+  background: #0a2e6a;
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+  margin-bottom: 15px;
+}
+
+.slot-cell {
+  background: #fff;
+  border-radius: 12px;
+  font-size: 2.5rem;
   display: flex;
-  align-items: center;
   justify-content: center;
-  color: #000;
+  align-items: center;
+  height: 70px;
+  user-select: none;
+  box-shadow: 0 3px 5px rgba(0,0,0,0.2);
+  color: #0b3d91;
+  font-weight: 700;
+  transition: background-color 0.3s ease;
 }
 
 .controls {
+  padding: 10px;
+  color: #ffeb3b;
+}
+
+.balance-aposta {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.panel {
+  justify-content: space-between;
   margin-bottom: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0 10px;
 }
 
-.panel label {
-  display: block;
-  margin: 5px 0;
-  font-size: 18px;
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: nowrap;
+  margin-top: 10px;
 }
 
-#bet {
-  width: 80px;
-  padding: 5px;
-  font-size: 16px;
-  border-radius: 5px;
+.btn-spin-big {
+  background: #ffeb3b;
   border: none;
-}
-
-.buttons button {
-  font-size: 18px;
-  margin: 5px;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  background: #ffd700;
-  color: #000;
+  padding: 16px 30px;
+  border-radius: 12px;
+  color: #0b3d91;
+  font-weight: 700;
+  font-size: 1.5rem;
   cursor: pointer;
-  transition: background 0.2s ease;
+  user-select: none;
+  box-shadow: 0 5px #bfa90c;
+  transition: background-color 0.3s ease;
 }
 
-.buttons button:hover {
-  background: #ffcc00;
+.btn-spin-big:hover {
+  background: #f0d500;
 }
 
-#message {
-  margin-top: 10px;
-  font-weight: bold;
-  color: #00ff00;
+.btn-spin-big:active {
+  box-shadow: none;
+  transform: translateY(2px);
 }
 
-.donate-text {
-  font-size: 20px;
-  font-weight: bold;
-  margin-top: 30px;
-}
-
-#qrcode {
-  margin-top: 10px;
-  width: 150px;
-  height: 150px;
+.btn-speed-small {
+  background: #ffeb3b;
+  border: none;
+  padding: 8px 14px;
   border-radius: 10px;
+  color: #0b3d91;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 3px #bfa90c;
+  transition: background-color 0.3s ease;
 }
 
-.footer {
-  font-size: 14px;
-  margin-top: 10px;
-  color: #ccc;
+.btn-speed-small:hover {
+  background: #f0d500;
+}
+
+.btn-speed-small:active {
+  box-shadow: none;
+  transform: translateY(2px);
+}
+
+.btn-small {
+  background: #0845c1;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-small:hover {
+  background: #06388a;
+}
+
+.message {
+  margin-top: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-align: center;
+  min-height: 24px;
+}
+
+.qr-code-area {
+  text-align: center;
+  margin-top: 18px;
+  color: #ffeb3b;
+}
+
+.qr-code-area img {
+  width: 180px;
+  height: 180px;
+  margin-top: 8px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.pix-key {
+  margin-top: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+footer {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #bbb;
 }
