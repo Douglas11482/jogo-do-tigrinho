@@ -1,267 +1,54 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <title>Jogo do Tigrinho - Slot Machine</title>
-  <style>
-    /* Fundo azul com imagem animada do tigrinho */
-    body {
-      margin: 0;
-      padding: 20px;
-      background-color: #004080;
-      background-image: url('img/tigrinho-fundo.gif');
-      background-repeat: no-repeat;
-      background-position: center bottom;
-      background-size: 300px auto;
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
-
-    h1 {
-      margin-bottom: 30px;
-      text-shadow: 0 0 8px #00ffff;
-    }
-
-    /* Grid 3x3 para as imagens do slot */
-    #slot-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 80px);
-      grid-template-rows: repeat(3, 80px);
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .slot-cell {
-      background-color: #001f4d;
-      border-radius: 10px;
-      font-size: 48px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 0 10px #00ffff;
-      user-select: none;
-      transition: box-shadow 0.3s ease;
-    }
-
-    /* efeito de luz na vitória */
-    .slot-cell.win {
-      box-shadow: 0 0 20px 4px #00ff00;
-      animation: glow 1s ease-in-out infinite alternate;
-    }
-
-    @keyframes glow {
-      from { box-shadow: 0 0 10px 2px #00ff00; }
-      to { box-shadow: 0 0 30px 6px #00ff00; }
-    }
-
-    /* Botão girar e aumentar velocidade */
-    #controls {
-      margin: 20px 0;
-    }
-
-    button {
-      background-color: #0099ff;
-      border: none;
-      border-radius: 6px;
-      color: white;
-      font-size: 16px;
-      padding: 12px 20px;
-      margin: 0 10px;
-      cursor: pointer;
-      box-shadow: 0 0 8px #0099ff;
-      transition: background-color 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #007acc;
-    }
-
-    /* Saldo e resultado */
-    #saldo, #resultado {
-      font-size: 20px;
-      margin-top: 15px;
-      text-shadow: 0 0 4px #00ffff;
-    }
-
-    /* QR Code posicionado abaixo do jogo */
-    #qrcode-container {
-      margin-top: 30px;
-      display: inline-block;
-      background: white;
-      padding: 12px;
-      border-radius: 12px;
-      box-shadow: 0 0 12px #00ffff;
-    }
-
-    #qrcode {
-      width: 140px;
-      height: 140px;
-      display: block;
-    }
-
-    /* Mensagem sem fins lucrativos */
-    #mensagem-footer {
-      margin-top: 30px;
-      font-size: 14px;
-      color: #a0eaff;
-      text-shadow: 0 0 3px #00ffff;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Jogo do Tigrinho - Slot Machine</title>
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+<div id="container-jogo">
+
   <h1>🎰 Jogo do Tigrinho</h1>
 
-  <div id="slot-grid">
-    <!-- 9 slots -->
-    <div class="slot-cell">🐯</div>
-    <div class="slot-cell">🍒</div>
-    <div class="slot-cell">💎</div>
-    <div class="slot-cell">🐯</div>
-    <div class="slot-cell">🍒</div>
-    <div class="slot-cell">💎</div>
-    <div class="slot-cell">🐯</div>
-    <div class="slot-cell">🍒</div>
-    <div class="slot-cell">💎</div>
+  <div id="roleta-container">
+    <div id="roleta" class="roleta-grid">
+      <!-- 9 posições 3x3 -->
+      <div class="slot-cell" data-symbol=""></div>
+      <div class="slot-cell" data-symbol=""></div>
+      <div class="slot-cell" data-symbol=""></div>
+      <div class="slot-cell" data-symbol=""></div>
+      <div class="slot-cell" data-symbol=""></div>
+      <div class="slot-cell" data-symbol=""></div>
+      <div class="slot-cell" data-symbol=""></div>
+      <div class="slot-cell" data-symbol=""></div>
+      <div class="slot-cell" data-symbol=""></div>
+    </div>
   </div>
 
-  <div id="controls">
+  <div id="resultado"></div>
+  <div id="saldo">💰 Saldo: R$ 50.00</div>
+
+  <div id="controles">
     <button id="btnGirar">Girar</button>
     <button id="btnAcelerar">Acelerar Giro</button>
   </div>
 
-  <div id="saldo">💰 Saldo: R$50.00</div>
-  <div id="resultado"></div>
-
   <div id="qrcode-container">
-    <img id="qrcode" src="img/qrcode.png" alt="QR Code para doação" />
+    <canvas id="qrcode"></canvas>
   </div>
 
-  <div id="mensagem-footer">Projeto sem fins lucrativos</div>
+  <div id="msg-sem-fins">⚠️ Sem fins lucrativos</div>
 
-  <audio id="somGiro" src="sounds/giro.mp3"></audio>
-  <audio id="somGanhou" src="sounds/ganhou.mp3"></audio>
+</div>
 
-  <script>
-    // Valores e imagens
-    const imagens = ['🐯','🍒','💎'];
-    const premios = {
-      '🐯': 10,
-      '💎': 5,
-      '🍒': 2
-    };
-    let saldo = 50;
-    let custoGiro = 2;
-    let giroRapido = false;
-    let giroVelocidade = 600; // ms entre troca de imagens
+<!-- Sons -->
+<audio id="somGiro" src="sounds/giro.mp3"></audio>
+<audio id="somGanhou" src="sounds/ganhou.mp3"></audio>
 
-    const slotCells = document.querySelectorAll('.slot-cell');
-    const btnGirar = document.getElementById('btnGirar');
-    const btnAcelerar = document.getElementById('btnAcelerar');
-    const saldoDisplay = document.getElementById('saldo');
-    const resultadoDisplay = document.getElementById('resultado');
-    const somGiro = document.getElementById('somGiro');
-    const somGanhou = document.getElementById('somGanhou');
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script src="script.js"></script>
 
-    // Função para gerar giro aleatório para as 9 posições
-    function gerarGiro() {
-      let resultados = [];
-      for(let i=0; i<9; i++) {
-        const img = imagens[Math.floor(Math.random() * imagens.length)];
-        resultados.push(img);
-      }
-      return resultados;
-    }
-
-    // Atualiza o grid do jogo com imagens
-    function atualizarGrid(resultados) {
-      slotCells.forEach((cell, i) => {
-        cell.textContent = resultados[i];
-        cell.classList.remove('win');
-      });
-    }
-
-    // Verifica vitórias horizontais e diagonais, sem vertical
-    function verificarVitoria(resultados) {
-      let ganhos = 0;
-      let vencedoresIndices = [];
-
-      // Linhas horizontais
-      for(let linha=0; linha<3; linha++) {
-        let inicio = linha*3;
-        if(resultados[inicio] === resultados[inicio+1] && resultados[inicio] === resultados[inicio+2]) {
-          ganhos += premios[resultados[inicio]] * custoGiro;
-          vencedoresIndices.push(inicio, inicio+1, inicio+2);
-        }
-      }
-
-      // Diagonais
-      if(resultados[0] === resultados[4] && resultados[0] === resultados[8]) {
-        ganhos += premios[resultados[0]] * custoGiro;
-        vencedoresIndices.push(0,4,8);
-      }
-      if(resultados[2] === resultados[4] && resultados[2] === resultados[6]) {
-        ganhos += premios[resultados[2]] * custoGiro;
-        vencedoresIndices.push(2,4,6);
-      }
-
-      // Marca as células vencedoras
-      vencedoresIndices.forEach(i => slotCells[i].classList.add('win'));
-
-      return ganhos;
-    }
-
-    // Função para girar e animar o slot
-    async function girar() {
-      if(saldo < custoGiro) {
-        resultadoDisplay.textContent = 'Saldo insuficiente para girar.';
-        return;
-      }
-      saldo -= custoGiro;
-      saldoDisplay.textContent = `💰 Saldo: R$${saldo.toFixed(2)}`;
-      resultadoDisplay.textContent = '';
-      somGiro.currentTime = 0;
-      somGiro.play();
-
-      // Animação do giro (troca rápida de imagens)
-      for(let i=0; i<5; i++) {
-        let resultados = gerarGiro();
-        atualizarGrid(resultados);
-        await new Promise(r => setTimeout(r, giroVelocidade));
-      }
-
-      // Resultado final
-      let resultados = gerarGiro();
-      atualizarGrid(resultados);
-
-      let ganhos = verificarVitoria(resultados);
-      if(ganhos > 0) {
-        saldo += ganhos;
-        saldoDisplay.textContent = `💰 Saldo: R$${saldo.toFixed(2)}`;
-        resultadoDisplay.textContent = `🎉 Você ganhou R$${ganhos.toFixed(2)}!`;
-        somGanhou.currentTime = 0;
-        somGanhou.play();
-      } else {
-        resultadoDisplay.textContent = 'Tente novamente!';
-      }
-    }
-
-    btnGirar.addEventListener('click', girar);
-
-    btnAcelerar.addEventListener('click', () => {
-      if(giroVelocidade === 600) {
-        giroVelocidade = 300;
-        btnAcelerar.textContent = 'Desacelerar Giro';
-      } else {
-        giroVelocidade = 600;
-        btnAcelerar.textContent = 'Acelerar Giro';
-      }
-    });
-
-    // Inicialização: mostra saldo
-    saldoDisplay.textContent = `💰 Saldo: R$${saldo.toFixed(2)}`;
-  </script>
 </body>
 </html>
